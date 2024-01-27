@@ -40,6 +40,7 @@
 <button
 	on:click={() => {
 		theme = theme === 'dark' ? 'light' : 'dark';
+		localStorage.setItem(storageKey, theme);
 		reflectPreference();
 	}}
 	class="tab-highlight-none theme-toggle relative"

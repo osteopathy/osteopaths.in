@@ -12,12 +12,14 @@
 			<p class="text-layer-12 mb-1 pl-8 text-lg sm:text-xl">
 				Prefer to Email? send us an email and we will get back to you soon.
 			</p>
-			<span
-				class="text-layer-13 inline-flex items-center pl-8 text-base underline underline-offset-4 sm:text-lg"
-			>
-				<span>send now</span>
-				<ArrowRightIcon size={20} />
-			</span>
+			<a href="mailto:peadevp@gmail.com">
+				<span
+					class="text-layer-13 inline-flex items-center pl-8 text-base underline underline-offset-4 sm:text-lg"
+				>
+					<span>send now</span>
+					<ArrowRightIcon size={20} />
+				</span>
+			</a>
 		</div>
 	</div>
 </div>

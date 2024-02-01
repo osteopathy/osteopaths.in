@@ -42,8 +42,9 @@
 	<h2 class="text-5xl font-bold sm:text-6xl md:text-7xl lg:text-8xl">
 		<span
 			class="w-max bg-gradient-to-r from-sky-500 from-10% via-blue-500 via-30% to-indigo-500 to-90% bg-clip-text text-transparent dark:from-sky-300 dark:via-blue-400 dark:to-indigo-400"
-			>Osteopathy</span
 		>
+			Osteopathy
+		</span>
 	</h2>
 	<p class="text-muted-foreground mt-6 text-3xl sm:mt-12 sm:text-4xl md:text-5xl lg:text-6xl">
 		It is based on the idea that all the body's systems are interrelated. Osteopaths focus on

@@ -1,11 +1,10 @@
-import { error, json } from "@sveltejs/kit";
+import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { createWaitlistEntity, doesWaitlistEntityExist } from "$lib/server/kv";
 import { SECRET_reCAPTCHA_KEY } from "$env/static/private";
 
 export const POST: RequestHandler = async (event) => {
     const formData = await event.request.json();
-    console.log(formData);
     const emailData = formData['email'];
     const tokenData = formData['token'];
     if(!emailData) return json({ error: 'No email provided' })
@@ -25,16 +24,21 @@ export const POST: RequestHandler = async (event) => {
             },
             body: `secret=${SECRET_reCAPTCHA_KEY}&response=${tokenData}`
         })
-        const response = await fetch_response.json();
-        console.log(response)
-        return json({
-            message: response
-        })
+        const response = await fetch_response.json() as {
+            hostname: "osteopaths.in" | 'ssu.osteopaths.in';
+            score : number;
+            success: boolean
+        };
+        if (!response.success) {
+            return json({
+                error: 'reCAPTCHA failed'
+            })
+        }
     } catch (error) {
         console.log("Error",error)
     }
     try {
-        // await createWaitlistEntity(email);
+        await createWaitlistEntity(email);
         return json({
             message: 'email created',
         });

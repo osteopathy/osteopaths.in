@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import { PUBLIC_reCAPTCHA_KEY } from '$env/static/public';
 	import { ArrowRightCircleIcon } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
@@ -16,7 +15,6 @@
 				})
 			});
 			const {message, error} = await result.json();
-			console.log(message,error)
 			if (message) {
 				toast.success('Email is added Successfully to Waitlist!');
 			} else {

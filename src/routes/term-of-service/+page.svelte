@@ -1,5 +1,5 @@
 <main
-	class="max-w-5xl flex flex-col w-full min-h-[calc(100vh-400px)] prose prose-xl prose-h1:text-indigo-500 dark:prose-invert bg-layer-2 p-4 rounded-md"
+	class="max-w-screen-2xl flex flex-col w-full min-h-[calc(100vh-400px)] prose prose-xl prose-h1:text-indigo-500 dark:prose-invert bg-layer-2 p-4 rounded-md"
 >
 	<h1>Term of Service</h1>
 	<p>

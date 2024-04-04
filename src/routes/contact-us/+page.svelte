@@ -2,7 +2,7 @@
 	import { ArrowRightIcon, MailIcon } from 'lucide-svelte';
 </script>
 
-<div class="flex w-full max-w-5xl flex-col items-center px-2 py-10">
+<div class="flex w-full max-w-screen-2xl flex-col items-center px-2 py-10">
 	<h1 class="text-layer-11 mb-12 text-4xl font-black">Get in touch</h1>
 	<div class="flex flex-col">
 		<div class="bg-layer-0 flex flex-col items-start rounded-lg p-4">

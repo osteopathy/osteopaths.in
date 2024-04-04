@@ -4,26 +4,27 @@
 	import '../app.pcss';
 </script>
 
-<header class="mb-10 flex w-full max-w-5xl items-center justify-between">
-	<div class="inline-flex items-center gap-x-2 px-2 py-1">
-		<Logo size={32} />
-		<span class="text-xl font-medium">V2O</span>
+<header class="mb-20 flex w-full max-w-screen-2xl items-center justify-between">
+	<!-- px-2 py-1 -->
+	<div class="inline-flex items-center gap-x-2">
+		<!-- <Logo size={32} /> -->
+		<!-- <span class="text-xl font-medium">V2O</span> -->
 	</div>
 	<div class="flex items-center gap-x-4 rounded-full border px-2 py-2">
 		<ThemeButton />
-		<nav class="flex gap-x-3 pr-2">
+		<!-- <nav class="flex gap-x-3 pr-2">
 			<a href="/">Home</a>
 			<a href="/about-us">About Us</a>
-		</nav>
+		</nav> -->
 	</div>
 	<div class="hidden sm:block">
-		<a href="/contact-us">Contact Us</a>
+		<!-- <a href="/contact-us">Contact Us</a> -->
 	</div>
 </header>
 <slot />
 <div class="py-10"></div>
 <footer
-	class="w-full max-w-5xl mt-auto bg-layer-2 py-2 pl-2 pr-4 mb-10 flex flex-col shadow-md shadow-layer-6/30 rounded-xl"
+	class="w-full max-w-screen-2xl mt-auto bg-layer-2 py-2 pl-2 pr-4 mb-10 flex flex-col shadow-md shadow-layer-6/30 rounded-xl"
 >
 	<div class="flex flex-col sm:flex-row items-center gap-y-4 mb-2 sm:mb-1 justify-between w-full">
 		<div class="flex items-center gap-x-2">

@@ -11,7 +11,7 @@
 	/>
 </svelte:head>
 
-<main class="prose dark:prose-invert sm:prose-lg md:prose-xl relative w-full max-w-5xl">
+<main class="prose dark:prose-invert sm:prose-lg md:prose-xl relative w-full max-w-screen-2xl">
 	<h1>{title}</h1>
 	<h3>{description}</h3>
 	<slot />

@@ -2,7 +2,7 @@
     import { osteopaths } from "./data"
 </script>
 
-<main class="max-w-5xl w-full">
+<main class="max-w-screen-2xl w-full">
     <h1 class="text-3xl font-bold mb-4">Osteopaths</h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {#each osteopaths as osteopath}

@@ -2,9 +2,14 @@ import { fontFamily } from 'tailwindcss/defaultTheme';
 import TypographyPlugin from '@tailwindcss/typography';
 import FormPlugin from '@tailwindcss/forms';
 
+function getRgbChannels(hex) {
+	const { red, green, blue } = hexRgb(hex);
+	return `${red} ${green} ${blue}`;
+}
+
 /** @type {import('tailwindcss').Config} */
 const config = {
-	darkMode: ['class'],
+	darkMode: 'selector',
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	safelist: ['dark'],
 	theme: {
@@ -16,6 +21,20 @@ const config = {
 			}
 		},
 		extend: {
+				"animation": {
+				  shimmer: "shimmer 2s linear infinite"
+				},
+				"keyframes": {
+				  shimmer: {
+					from: {
+					  "backgroundPosition": "0 0"
+					},
+					to: {
+					  "backgroundPosition": "-200% 0"
+					}
+				  }
+				},
+			  
 			colors: {
 				border: 'hsl(var(--border) / <alpha-value>)',
 				input: 'hsl(var(--input) / <alpha-value>)',
@@ -57,7 +76,7 @@ const config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: [...fontFamily.sans]
+				sans: ['Inter',...fontFamily.sans]
 			}
 		}
 	},

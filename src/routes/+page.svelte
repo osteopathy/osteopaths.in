@@ -18,7 +18,7 @@
 	</h2>
 	<section class="mt-12 max-w-sm px-4 sm:mt-16 md:mt-24 self-center">
 		<h2 class="sr-only">Sign up for early access</h2>
-		<form class="-mx-2 flex flex-wrap" name="Waitlist" data-netlify="true" data-netlify-recaptcha="true" method="POST">
+		<form class="-mx-2 flex flex-wrap" name="Waitlist" data-netlify="true" data-netlify-recaptcha="true">
 			<div class="mt-3 grow-[9999] basis-64 px-2">
 				<div class="group relative overflow-hidden rounded-md sm:rounded-full p-0.5">
 					<span

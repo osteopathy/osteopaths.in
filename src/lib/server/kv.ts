@@ -6,31 +6,25 @@ const upstashClient = new Redis({
 	token: env.UPSTASH_TOKEN
 });
 
-export const getGoogleTokens = async (userId: string) => {
-	try {
-		return (await upstashClient.hmget(`token:${userId}`, 'access_token', 'refersh_token')) as {
-			access_token: string;
-			refersh_token: string | null;
-		};
-	} catch (error) {
-		console.error(error);
-	}
-	return null;
+export const doesWaitlistEntityExist = async (email: string) => {
+	const result = await upstashClient.exists(`waitlist:${email}`);
+	return result === 1;
 };
 
-export const setGoogleTokens = async (
-	userId: string,
-	tokens: {
-		access_token: string;
-		refersh_token: string | null;
-	}
-) => {
-	try {
-		return await upstashClient.hmset(`token:${userId}`, tokens);
-	} catch (error) {
-		console.error(error);
-	}
-	return null;
+export const getCreatedDateByWaitlistEntity = async (email: string) => {
+	return (await upstashClient.hget(`waitlist:${email}`, 'createdAt')) as string;
+};
+
+export const getUserIdByWaitlistEntity = async (email: string) => {
+	return (await upstashClient.hget(`waitlist:${email}`, 'userId')) as string;
+};
+
+export const deleteWaitlistEntity = async (email: string) => {
+	return await upstashClient.hdel(`waitlist:${email}`, 'userId', 'createdAt');
+};
+
+export const createWaitlistEntity = async (email: string) => {
+	return await upstashClient.hset(`waitlist:${email}`, { createdAt: Date.now().toString() });
 };
 
 export default upstashClient;

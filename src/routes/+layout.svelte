@@ -1,9 +1,10 @@
 <script>
+	import { Toaster } from "svelte-sonner"
 	import Logo from '$lib/components/logo.svelte';
 	import ThemeButton from '$lib/components/theme-button.svelte';
 	import '../app.pcss';
 </script>
-
+<Toaster/>
 <header class="mb-20 flex w-full max-w-screen-2xl items-center justify-between">
 	<!-- px-2 py-1 -->
 	<div class="inline-flex items-center gap-x-2">

@@ -57,6 +57,7 @@
 		"@upstash/redis": "^1.28.2",
 		"bits-ui": "^0.15.1",
 		"dotenv": "^16.4.1",
-		"drizzle-orm": "^0.29.3"
+		"drizzle-orm": "^0.29.3",
+		"svelte-sonner": "^0.3.21"
 	}
 }

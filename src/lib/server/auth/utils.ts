@@ -89,23 +89,25 @@ export const createUser = async (
 	googleId: string,
 	name: string,
 	email: string,
+	picture: string,
 	role: "user" | "student" = "user",
 	status: "idle" | "verified" = "idle"
 ): Promise<User> => {
 	return (
-		await db.insert(userTable).values({ googleId, name, email, role, status }).returning()
+		await db.insert(userTable).values({ googleId, name, email, picture, role, status }).returning()
 	)[0];
 };
 
 export const createUserWithUniversityMail = async (
 	universityMail: string,
-	name: string
+	name: string,
+	picture: string
 ): Promise<User> => {
 	return (
 		(
 			await db
 				.insert(userTable)
-				.values({ universityMail, name, status: "verified", role: "user" })
+				.values({ universityMail, name, status: "verified", role: "user", picture })
 				.returning()
 		)[0] ?? null
 	);
@@ -114,6 +116,7 @@ export const createUserWithUniversityMail = async (
 export const createStudent = async (
 	universityMail: string,
 	name: string,
+	picture: string,
 	batch: string,
 	course: string
 ) => {
@@ -132,6 +135,7 @@ export const createStudent = async (
 			universityMail,
 			name,
 			role: "student",
+			picture,
 			metadata: {
 				student_id: studentId
 			},
@@ -143,6 +147,7 @@ export const createStudent = async (
 	return {
 		id: studentId,
 		userId: userId,
+		picture,
 		batch,
 		course
 	};

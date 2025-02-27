@@ -76,30 +76,38 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		});
 	};
 
-	const claims = decodeIdToken(tokens.idToken()) as { sub: string; name: string; email: string };
+	const claims = decodeIdToken(tokens.idToken()) as {
+		sub: string;
+		name: string;
+		email: string;
+		picture: string;
+	};
 
 	// Reason to use googleUserId instead of just email
 	// A Google ID token's sub field is unique to each Google Account and is never reused.
 	// A Google Account can have multiple email addresses, but only one ID token.
-	const googleUserId = claims.sub;
-	const name = claims.name;
-	const email = claims.email;
+	const userDetails = {
+		name: claims.name,
+		email: claims.email,
+		picture: claims.picture,
+		googleId: claims.sub
+	};
 
 	// checking if the mail is ending with @srisriuniversity.edu.in
-	const [identifier, domain] = email.split("@");
+	const [identifier, domain] = userDetails.email.split("@");
 
 	if (event.locals.user && state?.endsWith("-mail")) {
 		if (state.endsWith("university-mail") && domain === "srisriuniversity.edu.in") {
 			// first-time need to create entry in student table
 			if (!event.locals.user.universityMail) {
-				const existingUser = await getUserFromUniversityMail(email);
+				const existingUser = await getUserFromUniversityMail(userDetails.email);
 
 				if (existingUser) {
 					return resolveSession(
 						event,
 						event.locals.user.id,
 						event.locals.user.status === "verified",
-						`already another account is linked to this university email ${email}`
+						`already another account is linked to this university email ${userDetails.email}`
 					);
 				}
 
@@ -108,26 +116,32 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				const course = id.substring(5);
 
 				if (batch && course) {
-					await connectStudent(event.locals.user.id, email, name, batch, course);
+					await connectStudent(
+						event.locals.user.id,
+						userDetails.email,
+						userDetails.name,
+						batch,
+						course
+					);
 					return resolveSession(event, event.locals.user.id);
 				}
 			}
 
-			await updateUniversityMail(event.locals.user.id, email);
+			await updateUniversityMail(event.locals.user.id, userDetails.email);
 		}
 		if (state.endsWith("personal-mail")) {
-			const existingUser = await getUserFromGoogleId(googleUserId);
+			const existingUser = await getUserFromGoogleId(userDetails.googleId);
 
 			if (existingUser) {
 				return resolveSession(
 					event,
 					event.locals.user.id,
 					event.locals.user.status === "verified",
-					`already another account is linked to this mail ${email}`
+					`already another account is linked to this mail ${userDetails.email}`
 				);
 			}
 
-			await updateGoogleAccount(event.locals.user.id, googleUserId, email);
+			await updateGoogleAccount(event.locals.user.id, userDetails.googleId, userDetails.email);
 		}
 		return new Response(null, {
 			status: 302,
@@ -139,10 +153,10 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 	const existingUser = await (async () => {
 		if (domain === "srisriuniversity.edu.in") {
-			return await getUserFromUniversityMail(email);
+			return await getUserFromUniversityMail(userDetails.email);
 		}
 		if (domain === "gmail.com") {
-			return await getUserFromGoogleId(googleUserId);
+			return await getUserFromGoogleId(userDetails.googleId);
 		}
 		return null;
 	})();
@@ -158,14 +172,29 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		const course = id.substring(5);
 
 		if (batch && course) {
-			const student = await createStudent(email, name, batch, course);
+			const student = await createStudent(
+				userDetails.email,
+				userDetails.name,
+				userDetails.picture,
+				batch,
+				course
+			);
 			return resolveSession(event, student.userId);
 		}
 
-		const user = await createUserWithUniversityMail(email, name);
+		const user = await createUserWithUniversityMail(
+			userDetails.email,
+			userDetails.name,
+			userDetails.picture
+		);
 		return resolveSession(event, user.id);
 	}
 
-	const user = await createUser(googleUserId, name, email);
+	const user = await createUser(
+		userDetails.googleId,
+		userDetails.name,
+		userDetails.email,
+		userDetails.picture
+	);
 	return resolveSession(event, user.id, false);
 }

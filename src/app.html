@@ -1,41 +1,12 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-	<meta charset="utf-8" />
-	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<meta name="theme-color" content="#111111">
-	
-	<link rel="preconnect" href="https://rsms.me/">
-	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=6Ldtua8pAAAAAA9HpT-hVNomeCJVF-IEsouHMhiG"></script>
-	
-	%sveltekit.head%
-	<!-- <script>
-		// safe us from splash of screen
-		const defaultTheme = undefined;
-		const theme = defaultTheme;
-		if (localStorage.getItem("theme-preference") === "dark") {
-			document.documentElement.classList.add("dark");
-		} else if (!("theme-preference" in localStorage)) {
-			if (
-				theme === "dark" ||
-				window.matchMedia("(prefers-color-scheme: dark)").matches
-			) {
-				document.documentElement.classList.add("dark");
-				document.querySelector('meta[name="theme-color"]').setAttribute('content', '#111111')
-			} else {
-				document.documentElement.classList.remove("dark");
-			}
-		} else {
-			document.documentElement.classList.remove("dark");
-		}
-	</script> -->
-</head>
-
-<body data-sveltekit-preload-data="hover">
-	<div style="display: contents">%sveltekit.body%</div>
-</body>
-
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
 </html>

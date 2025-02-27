@@ -1,0 +1,129 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+	--color-layer-0: var(--slate-0);
+	--color-layer-1: var(--slate-1);
+	--color-layer-2: var(--slate-2);
+	--color-layer-3: var(--slate-3);
+	--color-layer-4: var(--slate-5);
+	--color-layer-5: var(--slate-5);
+	--color-layer-6: var(--slate-6);
+	--color-layer-7: var(--slate-7);
+	--color-layer-8: var(--slate-8);
+	--color-layer-9: var(--slate-9);
+	--color-layer-10: var(--slate-10);
+	--color-layer-11: var(--slate-11);
+	--color-layer-12: var(--slate-12);
+	--color-layer-13: var(--slate-13);
+
+	--color-background: var(--slate-2);
+	--color-foreground: var(--slate-12);
+
+	--color-separator: var(--slate-6);
+
+	--color-primary: var(--slate-12);
+	--color-primary-foreground: var(--slate-1);
+
+	--color-input: var(--slate-6);
+	--color-ring: var(--slate-7);
+	--color-border: var(--slate-6);
+
+	--color-muted: var(--slate-4);
+	--color-muted-foreground: var(--slate-13);
+
+	--color-destructive: var(--color-red-500);
+	--color-destructive-foreground: var(--color-red-50);
+}
+
+@layer base {
+	:root {
+		/* Pure */
+		--slate-0: hsl(180, 20%, 100%);
+		/* App background */
+		--slate-1: hsl(180, 20%, 99%);
+		/* Subtle background */
+		--slate-2: hsl(180, 20%, 98%);
+		/* UI element background */
+		--slate-3: hsl(180, 11.1%, 94%);
+		/* Hovered UI element background */
+		--slate-4: hsl(180, 9.5%, 92%);
+		/* Active / Selected UI element background */
+		--slate-5: hsl(189, 10.7%, 89%);
+		/* Subtle borders and separators */
+		--slate-6: hsl(180, 10.1%, 86.4%);
+		/* UI element border and focus rings */
+		--slate-7: hsl(186.6, 9.9%, 82.1%);
+		/* Hovered UI element border */
+		--slate-8: hsl(189.2, 10.2%, 75%);
+		/* Solid backgrounds */
+		--slate-9: hsl(189.2, 5.9%, 57%);
+		/* Hovered solid backgrounds */
+		--slate-10: hsl(193.8, 5.4%, 52.75%);
+		/* Low-contrast text */
+		--slate-11: hsl(200, 5.9%, 40%);
+		/* High-contrast text */
+		--slate-12: hsl(210, 12.5%, 12.55%);
+		/* Inverted */
+		--slate-13: hsl(214, 12.5%, 8.55%);
+	}
+
+	.dark {
+		--slate-0: hsl(180, 5.55%, 4.05%);
+		--slate-1: hsl(180, 5.55%, 7.05%);
+		--slate-2: hsl(200, 5.9%, 10%);
+		--slate-3: hsl(195, 5.7%, 13.72%);
+		--slate-4: hsl(210, 7.14%, 16.47%);
+		--slate-5: hsl(205.71, 7.07%, 19.4%);
+		--slate-6: hsl(206.66, 7.69%, 23%);
+		--slate-7: hsl(207.27, 7.58%, 28.4%);
+		--slate-8: hsl(208, 7.7%, 38.2%);
+		--slate-9: hsl(201.42, 6.25%, 43.9%);
+		--slate-10: hsl(198.46, 5.17%, 49.2%);
+		--slate-11: hsl(204, 6.75%, 71%);
+		--slate-12: hsl(200, 9.1%, 93.5%);
+		--slate-13: hsl(200, 9.1%, 96.5%);
+	}
+
+	html {
+		@apply touch-manipulation antialiased;
+		font-feature-settings:
+			"rlig" 1,
+			"calt" 0;
+		text-rendering: optimizeLegibility;
+		font-synthesis: none;
+	}
+
+	@supports (font-synthesis-weight: none) {
+		html {
+			font-synthesis: initial;
+			font-synthesis-weight: none;
+		}
+	}
+
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-layer-200, currentColor);
+	}
+
+	body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		max-width: 100vw;
+		min-height: 100vh;
+		text-rendering: optimizeLegibility;
+		-webkit-text-size-adjust: 100%;
+		-moz-text-size-adjust: 100%;
+		text-size-adjust: 100%;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+}

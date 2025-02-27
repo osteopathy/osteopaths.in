@@ -1,18 +1,14 @@
-import type { Config } from 'drizzle-kit';
-import * as dotenv from 'dotenv';
+import { defineConfig } from "drizzle-kit";
+if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
 
-dotenv.config();
-
-export default {
-	schema: 'src/lib/server/db/schema/index.ts',
-	out: './drizzle/migrations',
-	driver: 'turso',
+export default defineConfig({
+	schema: "./src/lib/database/schema/**",
 	dbCredentials: {
-		url: process.env.DATABASE_URL!,
-		authToken: process.env.DATABASE_AUTH_TOKEN!
+		url: process.env.DATABASE_URL,
+		authToken: process.env.DATABASE_AUTH_TOKEN
 	},
-	// Print all statements
+	out: "./src/lib/database/migrations",
 	verbose: true,
-	// Always ask for my confirmation
-	strict: true
-} satisfies Config;
+	strict: true,
+	dialect: "turso"
+});

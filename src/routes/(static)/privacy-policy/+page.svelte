@@ -1,11 +1,11 @@
 <main
-	class="max-w-screen-2xl flex flex-col w-full min-h-[calc(100vh-400px)] prose prose-xl prose-h1:text-indigo-500 dark:prose-invert bg-layer-2 p-4 rounded-md"
+	class="prose prose-xl prose-h1:text-indigo-500 dark:prose-invert bg-layer-2 flex min-h-[calc(100vh-400px)] w-full max-w-screen-2xl flex-col rounded-md p-4"
 >
 	<h1>Privacy Policy</h1>
 	<p>Last updated on October 30, 2023</p>
 	<h2>Introduction</h2>
 	<p>
-		Clinic-App we is committed to protecting the privacy of users of our date-time scheduling web
+		osteopaths.in we is committed to protecting the privacy of users of our date-time scheduling web
 		app for osteopaths, which integrates with Google Calendar Services. This Privacy Policy outlines
 		our practices regarding the collection, use, and disclosure of personal and non-personal
 		information from users of our app.<br />

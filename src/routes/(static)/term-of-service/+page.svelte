@@ -1,11 +1,11 @@
 <main
-	class="max-w-screen-2xl flex flex-col w-full min-h-[calc(100vh-400px)] prose prose-xl prose-h1:text-indigo-500 dark:prose-invert bg-layer-2 p-4 rounded-md"
+	class="prose prose-xl prose-h1:text-indigo-500 dark:prose-invert bg-layer-2 flex min-h-[calc(100vh-400px)] w-full max-w-screen-2xl flex-col rounded-md p-4"
 >
 	<h1>Term of Service</h1>
 	<p>
 		<em
 			><strong
-				>These terms of service "Terms" apply to your access and use of the Clinic-App the
+				>These terms of service "Terms" apply to your access and use of the osteopaths.in the
 				"Service".Please read them carefully.</strong
 			></em
 		>
@@ -22,7 +22,7 @@
 		the changes are effective 2 days after we post such revised Terms (indicated by revising the
 		date at the top of these Terms) or upon your acceptance if we provide a mechanism for your
 		immediate acceptance of the revised Terms (such as a click-through confirmation or acceptance
-		button). It is your responsibility to check Clinic-App Website for changes to these Terms. If
+		button). It is your responsibility to check osteopaths.in Website for changes to these Terms. If
 		you continue to use the Service after the revised Terms go into effect, then you have accepted
 		the changes to these Terms.
 	</p>

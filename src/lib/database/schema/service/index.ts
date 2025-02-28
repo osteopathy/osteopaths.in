@@ -1,5 +1,7 @@
 import { text } from "drizzle-orm/sqlite-core";
 import { createTable, id, timestamps } from "../../utils";
+import { relations, type InferSelectModel } from "drizzle-orm";
+import { serviceProviderTable } from "./provider";
 
 export const serviceTable = createTable("service", {
 	id,
@@ -7,3 +9,9 @@ export const serviceTable = createTable("service", {
 	description: text("description").notNull(),
 	...timestamps
 });
+
+export type Service = InferSelectModel<typeof serviceTable>;
+
+export const serviceProviderRelation = relations(serviceTable, ({ many }) => ({
+	providers: many(serviceProviderTable)
+}));

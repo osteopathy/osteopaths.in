@@ -2,7 +2,7 @@ import { text } from "drizzle-orm/sqlite-core";
 import { createTable, id, timestamps } from "../../utils";
 import { serviceProviderTable } from "./provider";
 import { userTable } from "../user";
-import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
+import { relations, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
 
 export const serviceAppointmentTable = createTable("service_appointment", {
 	id,
@@ -17,3 +17,14 @@ export const serviceAppointmentTable = createTable("service_appointment", {
 
 export type ServiceAppointment = InferSelectModel<typeof serviceAppointmentTable>;
 export type InsertServiceAppointment = InferInsertModel<typeof serviceAppointmentTable>;
+
+export const serviceAppointmentRelation = relations(serviceAppointmentTable, ({ one }) => ({
+	user: one(userTable, {
+		fields: [serviceAppointmentTable.userId],
+		references: [userTable.id]
+	}),
+	serviceProvider: one(serviceProviderTable, {
+		fields: [serviceAppointmentTable.serviceProviderId],
+		references: [serviceProviderTable.id]
+	})
+}));

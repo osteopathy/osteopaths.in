@@ -47,6 +47,11 @@ const RequiredIcons = [
 		outline: "fluent:dismiss-circle-24-regular",
 		solid: "fluent:dismiss-circle-24-filled",
 		name: "Close"
+	},
+	{
+		outline: "fluent:chevron-down-24-regular",
+		solid: "fluent:chevron-down-24-filled",
+		name: "ChevronDown"
 	}
 ];
 

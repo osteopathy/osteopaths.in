@@ -4,7 +4,27 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 
 @custom-variant dark (&:is(.dark *));
+@theme {
+	--animate-accordion-down: accordion-down 0.2s ease-out;
+	--animate-accordion-up: accordion-up 0.2s ease-out;
 
+	@keyframes accordion-down {
+		0% {
+			height: 0;
+		}
+		100% {
+			height: var(--bits-accordion-content-height);
+		}
+	}
+	@keyframes accordion-up {
+		0% {
+			height: var(--bits-accordion-content-height);
+		}
+		100% {
+			height: 0;
+		}
+	}
+}
 @theme inline {
 	--color-layer-0: var(--slate-0);
 	--color-layer-1: var(--slate-1);

@@ -1,6 +1,7 @@
 import { db } from "$lib/database/index.js";
 import { userTable } from "$lib/database/schema/index.js";
 import { fail, redirect } from "@sveltejs/kit";
+import { eq } from "drizzle-orm";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { z } from "zod";
@@ -20,7 +21,9 @@ export const load = async (event) => {
 };
 
 export const actions = {
-	default: async ({ request }) => {
+	default: async ({ request, locals }) => {
+		if (!locals.user) return fail(401, { message: "Unauthorized" });
+
 		const form = await superValidate(request, zod(schema));
 
 		if (!form.valid) {
@@ -30,10 +33,13 @@ export const actions = {
 		const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 		await sleep(400);
 
-		await db.update(userTable).set({
-			name: form.data.name,
-			phone: form.data.phone
-		});
+		await db
+			.update(userTable)
+			.set({
+				name: form.data.name,
+				phone: form.data.phone
+			})
+			.where(eq(userTable.id, locals.user?.id));
 
 		return message(form, "Form posted successfully!");
 	}

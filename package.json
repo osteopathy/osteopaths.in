@@ -19,6 +19,7 @@
 		"generate-icon": "node scripts/generate-icon/index.mjs"
 	},
 	"devDependencies": {
+		"@astrojs/cli-kit": "^0.4.1",
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@iconify-json/fluent": "^1.2.14",

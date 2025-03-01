@@ -36,5 +36,6 @@ export const userRelation = relations(userTable, ({ one, many }) => ({
 	serviceProviders: many(serviceProviderTable),
 	serviceSubscriptions: many(serviceSupscriptionTable),
 	appointment: many(serviceAppointmentTable),
-	notificationSubscriptions: many(userNotificationSubscriptionTable)
+	userNotifications: many(userNotificationSubscriptionTable),
+	userNotificationSubscriptions: many(userNotificationSubscriptionTable)
 }));

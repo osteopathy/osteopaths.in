@@ -12,6 +12,6 @@ export const serviceTable = createTable("service", {
 
 export type Service = InferSelectModel<typeof serviceTable>;
 
-export const serviceProviderRelation = relations(serviceTable, ({ many }) => ({
+export const serviceRelation = relations(serviceTable, ({ many }) => ({
 	providers: many(serviceProviderTable)
 }));

@@ -7,7 +7,7 @@
 </script>
 
 {@render children()}
-<nav class="border-border bg-background fixed bottom-0 flex w-full max-w-xl border-t">
+<nav class="border-border bg-background flex w-full max-w-xl border-t">
 	<a
 		aria-current={page.url.pathname === "/app/service" && "page"}
 		href="/app/service"

@@ -16,6 +16,6 @@
 	{@render header()}
 	<SelectTheme />
 </header>
-<main class="w-full max-w-xl grow px-2.5 pb-16 {className}">
+<main class="h-0 min-h-0 w-full max-w-xl shrink grow overflow-auto px-2.5 pb-16 {className}">
 	{@render children()}
 </main>

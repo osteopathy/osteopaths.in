@@ -20,7 +20,7 @@ export default defineConfig({
 			srcDir: "src",
 			filename: "service-worker.ts",
 			registerType: "autoUpdate",
-			injectRegister: false,
+			// injectRegister: false,
 
 			pwaAssets: {
 				disabled: false,

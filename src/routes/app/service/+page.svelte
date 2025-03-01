@@ -7,14 +7,15 @@
 	import { Accordion } from "bits-ui";
 	const osteopath = {
 		id: "0d9qowa7pgtheap",
-		name: "Kamakshi Thakur",
-		gmail: "kamakshi.t2022bos@srisriuniversity.edu.in",
-		image: "https://res.cloudinary.com/dj26aw1kl/image/upload/v1709227806/yny5chvn5ao8xsni9zfc.jpg",
+		name: "Rajas Choudhary",
+		gmail: "rajas.c2022bos@srisriuniversity.edu.in",
+		image:
+			"https://instagram.fjai12-1.fna.fbcdn.net/v/t51.2885-19/472738020_1127232635004258_4853757353272573744_n.jpg?_nc_ht=instagram.fjai12-1.fna.fbcdn.net&_nc_cat=106&_nc_oc=Q6cZ2AFhBJfmZRphVvggigu8Jsb1y_N2kp8rDQHw_VlxoLG-7VyTEiQdUOkYPy_-VM5KJ8Y&_nc_ohc=WZYFaJROdRMQ7kNvgEWVB4o&_nc_gid=7d7010cf19b1421e870989bcedda2c31&edm=AP4sbd4BAAAA&ccb=7-5&oh=00_AYCB96FU4cjevoBmMzu7q7Sh9FfMWULHC0iAOG3Vjmoatw&oe=67C83CA3&_nc_sid=7a9f4b",
 		role: "osteopath",
 		phone_number: "8580684939",
-		username: "kamakshi-014",
+		username: "rajas.c2022bos",
 		course: {
-			name: "B.Sc Osteopathy 4th Year"
+			name: "B.Sc Osteopathy 3rd Year"
 		},
 		batch: "2022"
 	};

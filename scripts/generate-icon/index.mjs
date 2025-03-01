@@ -52,6 +52,11 @@ const RequiredIcons = [
 		outline: "fluent:chevron-down-24-regular",
 		solid: "fluent:chevron-down-24-filled",
 		name: "ChevronDown"
+	},
+	{
+		outline: "fluent:info-28-regular",
+		solid: "fluent:info-28-filled",
+		name: "Info"
 	}
 ];
 

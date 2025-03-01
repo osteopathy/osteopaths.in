@@ -21,7 +21,7 @@ export const load = async (event) => {
 };
 
 export const actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ request, locals, cookies }) => {
 		if (!locals.user) return fail(401, { message: "Unauthorized" });
 
 		const form = await superValidate(request, zod(schema));
@@ -31,9 +31,8 @@ export const actions = {
 		}
 
 		const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-		await sleep(400);
-
-		await db
+		console.log("Updating", form.data, locals.user);
+		const res = await db
 			.update(userTable)
 			.set({
 				name: form.data.name,
@@ -41,6 +40,15 @@ export const actions = {
 			})
 			.where(eq(userTable.id, locals.user?.id));
 
+		cookies.set("hard-refresh", "TRUE", {
+			httpOnly: true,
+			path: "/",
+			secure: import.meta.env.PROD,
+			sameSite: "lax",
+			expires: new Date(Date.now() + 3600)
+		});
+
+		console.log("RES", res.rows);
 		return message(form, "Form posted successfully!");
 	}
 };

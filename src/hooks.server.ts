@@ -2,11 +2,11 @@ import type { Handle } from "@sveltejs/kit";
 import * as auth from "$lib/server/auth/session";
 import { base64url, EncryptJWT, jwtDecrypt } from "jose";
 import { JWT_SECRET } from "$env/static/private";
-import { setJWTTokenCookie } from "$lib/server/auth/session";
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionToken = event.cookies.get(auth.sessionCookieName);
 	const jwtToken = event.cookies.get(auth.jwtCookieName);
+	const hardRefresh = event.cookies.get("hard-refresh");
 
 	if (!sessionToken) {
 		event.locals.user = null;
@@ -31,7 +31,15 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 
 	let expiresAt = value.payload.exp * 1000; // ms;
 	// validate token after every 1 day
-	if (Date.now() >= expiresAt - 1000 * 60 * 60 * 24 * 28) {
+	if (Date.now() >= expiresAt - 1000 * 60 * 60 * 24 * 28 || hardRefresh === "TRUE") {
+		if (hardRefresh === "TRUE")
+			event.cookies.set("hard-refresh", "", {
+				httpOnly: true,
+				path: "/",
+				secure: import.meta.env.PROD,
+				sameSite: "lax",
+				maxAge: 0
+			});
 		const { session, user } = await auth.validateSessionToken(sessionToken);
 		if (session && user) {
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
@@ -40,7 +48,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 				.setProtectedHeader({ alg: "dir", enc: "A128CBC-HS256" })
 				.setExpirationTime(session.expiresAt)
 				.encrypt(secret);
-			setJWTTokenCookie(event, jwt, session.expiresAt);
+			auth.setJWTTokenCookie(event, jwt, session.expiresAt);
 		} else {
 			auth.deleteSessionTokenCookie(event);
 			auth.deleteJWTTokenCookie(event);

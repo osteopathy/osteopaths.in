@@ -111,7 +111,7 @@
 			{/if}
 		</div>
 	</div>
-	<div class="flex w-full items-center justify-between">
+	<div class="flex w-full items-center justify-between px-12">
 		<div></div>
 		<form method="post" use:enhance action="/?/logout">
 			<Button variant="destructive">Logout</Button>

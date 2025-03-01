@@ -5,5 +5,5 @@ export default defineConfig({
 		preset: "2023"
 	},
 	preset,
-	images: ["static/favicon.svg"]
+	images: ["static/logo.svg"]
 });

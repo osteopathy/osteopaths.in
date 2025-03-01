@@ -21,6 +21,7 @@
 
 <ModeWatcher />
 {@render children()}
+
 {#await import('$lib/components/pwa/pwa-badge.svelte') then { default: PWABadge }}
 	<PWABadge />
 {/await}

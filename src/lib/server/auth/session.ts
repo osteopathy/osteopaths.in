@@ -7,6 +7,7 @@ import { db } from "$lib/database";
 import { eq } from "drizzle-orm";
 
 export const sessionCookieName = "auth-session";
+export const jwtCookieName = "auth-token";
 
 export type SessionValidationResult =
 	| {
@@ -29,8 +30,33 @@ export type SessionValidationResult =
 	  }
 	| { session: null; user: null };
 
+// JWT Based Session Auth Strategy
+
+export async function setJWTTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {
+	event.cookies.set(jwtCookieName, token, {
+		httpOnly: true,
+		path: "/",
+		secure: import.meta.env.PROD,
+		sameSite: "lax",
+		expires: expiresAt
+	});
+}
+
+export function deleteJWTTokenCookie(event: RequestEvent): void {
+	event.cookies.set(jwtCookieName, "", {
+		httpOnly: true,
+		path: "/",
+		secure: import.meta.env.PROD,
+		sameSite: "lax",
+		maxAge: 0
+	});
+}
+
+// Database Session Strategy
+
 export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+
 	const userSession = await db.query.userSessionTable.findFirst({
 		where: eq(userSessionTable.id, sessionId),
 		with: {
@@ -69,7 +95,7 @@ export async function validateSessionToken(token: string): Promise<SessionValida
 	}
 	if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
 		session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
-		db.$client.execute({
+		await db.$client.execute({
 			sql: "UPDATE user_session SET expires_at = ? WHERE user_session.id = ?",
 			args: [Math.floor(session.expiresAt.getTime() / 1000), session.id]
 		});
@@ -77,7 +103,8 @@ export async function validateSessionToken(token: string): Promise<SessionValida
 	return { session, user };
 }
 
-export function invalidateSession(sessionId: string): void {
+export function invalidateSession(sessionToken: string): void {
+	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(sessionToken)));
 	db.$client.execute({
 		sql: "DELETE FROM user_session WHERE id = ?",
 		args: [sessionId]

@@ -1,4 +1,9 @@
-import { generateSessionToken, setSessionTokenCookie } from "$lib/server/auth/session";
+import {
+	generateSessionToken,
+	setJWTTokenCookie,
+	setSessionTokenCookie,
+	type SessionValidationResult
+} from "$lib/server/auth/session";
 import { google } from "$lib/server/auth/google";
 import { decodeIdToken } from "arctic";
 
@@ -15,6 +20,8 @@ import {
 	connectStudent,
 	createUserWithUniversityMail
 } from "$lib/server/auth/utils";
+import { base64url, EncryptJWT } from "jose";
+import { JWT_SECRET } from "$env/static/private";
 
 // {
 //   iss: 'https://accounts.google.com',
@@ -62,12 +69,18 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const resolveSession = async (
 		event: RequestEvent,
 		userId: string,
-		verified: boolean = true,
+		payload: { user: NonNullable<SessionValidationResult["user"]> },
 		message?: string
 	) => {
 		const sessionToken = generateSessionToken();
 		const session = await createSession(sessionToken, userId);
 		setSessionTokenCookie(event, sessionToken, session.expiresAt);
+		const secret = base64url.decode(JWT_SECRET);
+		const jwt = await new EncryptJWT(payload)
+			.setProtectedHeader({ alg: "dir", enc: "A128CBC-HS256" })
+			.setExpirationTime(session.expiresAt)
+			.encrypt(secret);
+		setJWTTokenCookie(event, jwt, session.expiresAt);
 		return new Response(null, {
 			status: 302,
 			headers: {
@@ -106,7 +119,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 					return resolveSession(
 						event,
 						event.locals.user.id,
-						event.locals.user.status === "verified",
+						{ user: event.locals.user },
 						`already another account is linked to this university email ${userDetails.email}`
 					);
 				}
@@ -123,7 +136,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 						batch,
 						course
 					);
-					return resolveSession(event, event.locals.user.id);
+					return resolveSession(event, event.locals.user.id, { user: event.locals.user });
 				}
 			}
 
@@ -136,7 +149,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				return resolveSession(
 					event,
 					event.locals.user.id,
-					event.locals.user.status === "verified",
+					{ user: event.locals.user },
 					`already another account is linked to this mail ${userDetails.email}`
 				);
 			}
@@ -162,7 +175,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	})();
 
 	if (existingUser !== null) {
-		return resolveSession(event, existingUser.id, existingUser.status === "verified");
+		return resolveSession(event, existingUser.id, { user: existingUser });
 	}
 
 	if (domain === "srisriuniversity.edu.in") {
@@ -179,7 +192,19 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				batch,
 				course
 			);
-			return resolveSession(event, student.userId);
+			return resolveSession(event, student.userId, {
+				user: {
+					id: student.userId,
+					name: userDetails.name,
+					googleId: null,
+					email: null,
+					phone: null,
+					picture: student.picture,
+					role: "student",
+					status: "verified",
+					universityMail: userDetails.email
+				}
+			});
 		}
 
 		const user = await createUserWithUniversityMail(
@@ -187,7 +212,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			userDetails.name,
 			userDetails.picture
 		);
-		return resolveSession(event, user.id);
+
+		return resolveSession(event, user.id, { user });
 	}
 
 	const user = await createUser(
@@ -196,5 +222,5 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		userDetails.email,
 		userDetails.picture
 	);
-	return resolveSession(event, user.id, false);
+	return resolveSession(event, user.id, { user });
 }

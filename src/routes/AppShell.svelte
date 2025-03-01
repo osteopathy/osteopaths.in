@@ -12,10 +12,10 @@
 	} = $props();
 </script>
 
-<header class="mb-6 flex w-full max-w-xl items-center justify-between px-2.5 pt-4">
+<header class="flex w-full max-w-xl items-center justify-between px-2.5 py-4">
 	{@render header()}
 	<SelectTheme />
 </header>
-<main class="w-full max-w-xl grow px-2.5 pb-16 {className}">
+<main class="h-0 min-h-0 w-full max-w-xl shrink grow overflow-auto {className}">
 	{@render children()}
 </main>

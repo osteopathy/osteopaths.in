@@ -7,16 +7,16 @@
 	import { Accordion } from "bits-ui";
 	const osteopath = {
 		id: "0d9qowa7pgtheap",
-		name: "Rajas Choudhary",
-		gmail: "rajas.c2022bos@srisriuniversity.edu.in",
-		image: "/profile-pics/rajas-choudhary.png",
+		name: "Andrew Taylor Still",
+		gmail: "andrew.taylor@example.com",
+		image: "/profile-pics/andrew.webp",
 		role: "osteopath",
-		phone_number: "8580684939",
-		username: "rajas.c2022bos",
+		phone_number: "XXXXXXXXXX",
+		username: "andrew.taylor",
 		course: {
-			name: "B.Sc Osteopathy 3rd Year"
+			name: "Osteopathy"
 		},
-		batch: "2022"
+		batch: "first"
 	};
 </script>
 

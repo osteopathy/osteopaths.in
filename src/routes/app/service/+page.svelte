@@ -20,6 +20,21 @@
 	};
 </script>
 
+{#snippet accordionheader(name: string)}
+	<Accordion.Header>
+		<Accordion.Trigger
+			class="flex w-full flex-1 items-center justify-between px-2.5 py-3 transition-all select-none sm:py-5 [&[data-state=open]>span>svg]:rotate-180"
+		>
+			<h2 class="text-left text-2xl sm:text-3xl">{name}</h2>
+			<span
+				class="hover:bg-accent inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent"
+			>
+				<ChevronDownIcon class="size-8 transition-transform duration-200" />
+			</span>
+		</Accordion.Trigger>
+	</Accordion.Header>
+{/snippet}
+
 <AppShell>
 	{#snippet header()}
 		<span class="text-xl font-medium">Appointments</span>
@@ -30,20 +45,9 @@
 		type="multiple"
 	>
 		<Accordion.Item value="confirmed" class="border-border border-b">
-			<Accordion.Header>
-				<Accordion.Trigger
-					class="flex w-full flex-1 items-center justify-between py-3 transition-all select-none sm:py-5 [&[data-state=open]>span>svg]:rotate-180"
-				>
-					<h2 class="text-left text-2xl sm:text-3xl">Confirmed</h2>
-					<span
-						class="hover:bg-accent inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent"
-					>
-						<ChevronDownIcon class="size-12 transition-transform duration-200" />
-					</span>
-				</Accordion.Trigger>
-			</Accordion.Header>
+			{@render accordionheader("Confirmed")}
 			<Accordion.Content
-				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm tracking-[-0.01em]"
+				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden px-4 text-sm tracking-[-0.01em]"
 			>
 				<div class="mt-4 pb-10">
 					<AppointmentCard
@@ -58,20 +62,9 @@
 			</Accordion.Content>
 		</Accordion.Item>
 		<Accordion.Item value="requested" class="border-border border-b">
-			<Accordion.Header>
-				<Accordion.Trigger
-					class="flex w-full flex-1 items-center justify-between py-3 transition-all select-none sm:py-5 [&[data-state=open]>span>svg]:rotate-180"
-				>
-					<h2 class="text-left text-2xl sm:text-3xl">Requested</h2>
-					<span
-						class="hover:bg-accent inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent"
-					>
-						<ChevronDownIcon class="size-12 transition-transform duration-200" />
-					</span>
-				</Accordion.Trigger>
-			</Accordion.Header>
+			{@render accordionheader("Requested")}
 			<Accordion.Content
-				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm tracking-[-0.01em]"
+				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden px-4 text-sm tracking-[-0.01em]"
 			>
 				<div class="mt-4 pb-10">
 					<div class="flex items-start gap-x-3 sm:gap-x-6">
@@ -98,20 +91,9 @@
 			</Accordion.Content>
 		</Accordion.Item>
 		<Accordion.Item value="available" class="border-border border-b">
-			<Accordion.Header>
-				<Accordion.Trigger
-					class="flex w-full flex-1 items-center justify-between py-3 transition-all select-none sm:py-5 [&[data-state=open]>span>svg]:rotate-180"
-				>
-					<h2 class="text-left text-2xl sm:text-3xl">Available</h2>
-					<span
-						class="hover:bg-accent inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent"
-					>
-						<ChevronDownIcon class="size-12 transition-transform duration-200" />
-					</span>
-				</Accordion.Trigger>
-			</Accordion.Header>
+			{@render accordionheader("Available")}
 			<Accordion.Content
-				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm tracking-[-0.01em]"
+				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden px-4 text-sm tracking-[-0.01em]"
 			>
 				<div class="mt-4 flex flex-col gap-y-4 pb-10">
 					<div class="flex items-start gap-x-3 sm:gap-x-6">
@@ -144,20 +126,9 @@
 			</Accordion.Content>
 		</Accordion.Item>
 		<Accordion.Item value="feedbacks" class="border-border border-b">
-			<Accordion.Header>
-				<Accordion.Trigger
-					class="flex w-full flex-1 items-center justify-between py-3 transition-all select-none sm:py-5 [&[data-state=open]>span>svg]:rotate-180"
-				>
-					<h2 class="text-left text-2xl sm:text-3xl">Feedbacks</h2>
-					<span
-						class="hover:bg-accent inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent"
-					>
-						<ChevronDownIcon class="size-12 transition-transform duration-200" />
-					</span>
-				</Accordion.Trigger>
-			</Accordion.Header>
+			{@render accordionheader("Feedbacks")}
 			<Accordion.Content
-				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm tracking-[-0.01em]"
+				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden px-4 text-sm tracking-[-0.01em]"
 			>
 				<div class="mt-4 flex flex-col gap-y-6 pb-10">
 					<div>Feedbacks</div>

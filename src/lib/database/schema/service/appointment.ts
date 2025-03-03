@@ -17,7 +17,6 @@ export const date = customType<{ data: Date; driverData: string }>({
 			month: "2-digit",
 			year: "numeric"
 		});
-		console.log(formattedDate);
 		// returned as %mm/%dd/%yyyy;
 		const [month, day, year] = formattedDate.split("/");
 		// stored as %dd/%mm/%yyyy;

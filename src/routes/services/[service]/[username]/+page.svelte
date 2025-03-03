@@ -1,13 +1,14 @@
 <script lang="ts">
+	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 	import Avatar from "$lib/components/ui/avatar/avatar.svelte";
 	import Button from "$lib/components/ui/button/button.svelte";
 	import CalendarEditIcon from "$lib/icons/CalendarEditIcon.svelte";
 	import AppShell from "../../AppShell.svelte";
 	import type { PageData } from "./$types";
+	import SubscribeButton from "./subscribe-button.svelte";
 
 	let { data }: { data: PageData } = $props();
-	console.log(data.serviceProvider?.appointments);
 	const getEndAt = (startAt: string, duration: string) => {
 		let [hour, minute] = startAt.split(":").map(Number);
 		const addMinute = +duration;
@@ -30,6 +31,7 @@
 
 		return date.toLocaleDateString("en", { dateStyle: "full" });
 	};
+	let subscribed = $state(data.isSubscribed);
 </script>
 
 <AppShell
@@ -57,7 +59,12 @@
 				<span><CalendarEditIcon /></span>
 				<span>Slots</span>
 			</h2>
-			<Button size="sm">Subscribe</Button>
+			{#if data.serviceProvider?.id}
+				<SubscribeButton
+					service_provider_id={data.serviceProvider?.id}
+					bind:subscribed={data.isSubscribed}
+				/>
+			{/if}
 		</div>
 		<div class="mt-4 flex w-full flex-col gap-y-4 sm:mt-0 sm:gap-y-2">
 			{#each data.serviceProvider?.appointments ?? [] as appointment}

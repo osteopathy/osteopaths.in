@@ -72,6 +72,16 @@ const RequiredIcons = [
 		outline: "fluent:calendar-edit-32-regular",
 		solid: "fluent:calendar-edit-32-filled",
 		name: "CalendarEdit"
+	},
+	{
+		outline: "fluent:alert-24-regular",
+		solid: "fluent:alert-24-filled",
+		name: "Bell"
+	},
+	{
+		outline: "fluent:alert-on-24-regular",
+		solid: "fluent:alert-on-24-filled",
+		name: "BellRing"
 	}
 ];
 

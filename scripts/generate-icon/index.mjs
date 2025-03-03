@@ -57,6 +57,21 @@ const RequiredIcons = [
 		outline: "fluent:info-28-regular",
 		solid: "fluent:info-28-filled",
 		name: "Info"
+	},
+	{
+		outline: "fluent:arrow-right-24-regular",
+		solid: "fluent:arrow-right-24-filled",
+		name: "ArrowRight"
+	},
+	{
+		outline: "fluent:arrow-left-24-regular",
+		solid: "fluent:arrow-left-24-filled",
+		name: "ArrowLeft"
+	},
+	{
+		outline: "fluent:calendar-edit-32-regular",
+		solid: "fluent:calendar-edit-32-filled",
+		name: "CalendarEdit"
 	}
 ];
 

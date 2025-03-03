@@ -2,6 +2,7 @@
 	import AppointmentCard from "$lib/components/appointment-card.svelte";
 	import Avatar from "$lib/components/ui/avatar/avatar.svelte";
 	import Button from "$lib/components/ui/button/button.svelte";
+	import ArrowRightIcon from "$lib/icons/ArrowRightIcon.svelte";
 	import ChevronDownIcon from "$lib/icons/ChevronDownIcon.svelte";
 	import AppShell from "../../AppShell.svelte";
 	import { Accordion } from "bits-ui";
@@ -37,7 +38,11 @@
 
 <AppShell>
 	{#snippet header()}
-		<span class="text-xl font-medium">Appointments</span>
+		<span class="text-xl font-medium">Services</span>
+		<Button class="group pr-2.5" href="/services/osteopathy" variant="secondary">
+			Osteopaths
+			<ArrowRightIcon />
+		</Button>
 	{/snippet}
 	<Accordion.Root
 		value={["confirmed", "requested", "available", "feedbacks"]}

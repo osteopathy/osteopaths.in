@@ -32,7 +32,7 @@ export const actions: Actions = {
 			userId: event.locals.user.id,
 			serviceProviderId: service_provider_id
 		});
-		console.log("Subscribe ...");
+		// console.log("Subscribe ...");
 		return { subscribed: true };
 	},
 	unsubscribe: async (event) => {
@@ -48,7 +48,7 @@ export const actions: Actions = {
 					eq(serviceSubscriptionTable.serviceProviderId, service_provider_id)
 				)
 			);
-		console.log("Unsubscribe ...");
+		// console.log("Unsubscribe ...");
 		return { subscribed: false };
 	}
 };

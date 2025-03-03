@@ -4,34 +4,16 @@
 	import Avatar from "$lib/components/ui/avatar/avatar.svelte";
 	import Button from "$lib/components/ui/button/button.svelte";
 	import CalendarEditIcon from "$lib/icons/CalendarEditIcon.svelte";
+	import {
+		appointmentdetails,
+		friendlyDate,
+		getEndAt
+	} from "$lib/snippets/appointment-details.svelte";
 	import AppShell from "../../AppShell.svelte";
 	import type { PageData } from "./$types";
 	import SubscribeButton from "./subscribe-button.svelte";
 
 	let { data }: { data: PageData } = $props();
-	const getEndAt = (startAt: string, duration: string) => {
-		let [hour, minute] = startAt.split(":").map(Number);
-		const addMinute = +duration;
-		minute += addMinute;
-		hour += Math.floor(minute / 60);
-		minute %= 60;
-		return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-	};
-	// checking for if the date is today or tommorow and displaying accordingly
-	// const display = (date: Date) => {}
-	const friendlyDate = (date: Date | null) => {
-		if (!date) return "";
-		const today = new Date();
-
-		if (today.toDateString() === date.toDateString()) {
-			return "Today";
-		} else if (today.setDate(today.getDate() + 1) === date.setDate(date.getDate())) {
-			return "Tomorrow";
-		}
-
-		return date.toLocaleDateString("en", { dateStyle: "full" });
-	};
-	let subscribed = $state(data.isSubscribed);
 </script>
 
 <AppShell
@@ -71,16 +53,13 @@
 				{@const date = friendlyDate(appointment.date)}
 				{@const startAt = appointment.startAt}
 				{@const endAt = getEndAt(appointment.startAt ?? "00:00", appointment.duration ?? "30")}
-				<div class="flex w-full flex-wrap justify-between gap-x-2">
-					<div class="flex w-full items-center justify-between gap-x-4 sm:w-max">
-						<span class="text-foreground text-lg">{date}</span>
-						<span class="text-foreground text-lg">{appointment?.location}</span>
-					</div>
-					<div class="flex w-full items-center justify-between gap-x-4 sm:w-max">
-						<span class="text-foreground text-lg">{startAt} - {endAt}</span>
-						<Button size="xs">Request</Button>
-					</div>
-				</div>
+				{#snippet button()}
+					<Button size="xs">Request</Button>
+				{/snippet}
+				{@render appointmentdetails(
+					{ date, location: appointment.location, startAt, endAt },
+					button
+				)}
 			{/each}
 			{#if data.serviceProvider?.appointments?.length === 0}
 				<p class="text-muted-foreground text-lg">No appointments available.</p>

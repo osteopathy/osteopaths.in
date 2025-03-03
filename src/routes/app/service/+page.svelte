@@ -6,6 +6,12 @@
 	import ChevronDownIcon from "$lib/icons/ChevronDownIcon.svelte";
 	import AppShell from "../../AppShell.svelte";
 	import { Accordion } from "bits-ui";
+	import type { PageData, PageParentData } from "./$types";
+	import {
+		appointmentdetails,
+		friendlyDate,
+		getEndAt
+	} from "$lib/snippets/appointment-details.svelte";
 	const osteopath = {
 		id: "0d9qowa7pgtheap",
 		name: "Andrew Taylor Still",
@@ -19,6 +25,7 @@
 		},
 		batch: "first"
 	};
+	let { data }: { data: PageData } = $props();
 </script>
 
 {#snippet accordionheader(name: string)}
@@ -101,32 +108,41 @@
 				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden px-4 text-sm tracking-[-0.01em]"
 			>
 				<div class="mt-4 flex flex-col gap-y-4 pb-10">
-					<div class="flex items-start gap-x-3 sm:gap-x-6">
-						<Avatar
-							class="size-14"
-							src={osteopath.image}
-							alt="@{osteopath.username}"
-							fallback={osteopath.name.substring(0, 2)}
-						/>
-						<div class="flex flex-col">
-							<h3 class="text-foreground text-xl font-medium">{osteopath.name}</h3>
-							<p class="text-muted-foreground text-lg font-medium">{osteopath.course.name}</p>
-						</div>
-					</div>
-					<div class="mt-4 flex flex-col gap-y-4 sm:mt-0 sm:gap-y-2">
-						{#each [{ date: "Today", location: "Shruti 2nd Floor 201", timings: "10:00 AM - 11:00 AM" }, { date: "Today", location: "Shruti 1st Floor 113", timings: "03:00 PM Onwards" }] as appointment}
-							<div class="flex flex-wrap justify-between gap-x-2">
-								<div class="flex w-full items-center justify-between gap-x-4 sm:w-max">
-									<span class="text-foreground text-lg">{appointment.date}</span>
-									<span class="text-foreground text-lg">{appointment.location}</span>
-								</div>
-								<div class="flex w-full items-center justify-between gap-x-4 sm:w-max">
-									<span class="text-foreground text-lg">{appointment.timings}</span>
-									<Button size="xs">Request</Button>
-								</div>
+					{#each data.subscriptions as subscription}
+						<div class="flex items-start gap-x-3 sm:gap-x-6">
+							<Avatar
+								class="size-14"
+								src={subscription.serviceProvider?.user.picture}
+								alt="@{subscription.serviceProvider?.username}"
+								fallback={(subscription.serviceProvider?.username ?? "AB").substring(0, 2)}
+							/>
+							<div class="flex flex-col">
+								<h3 class="text-foreground text-xl font-medium">
+									{subscription.serviceProvider?.user.name}
+								</h3>
+								<p class="text-muted-foreground text-lg font-medium">
+									{subscription.serviceProvider?.user.universityMail}
+								</p>
 							</div>
-						{/each}
-					</div>
+						</div>
+						<div class="mt-4 flex flex-col gap-y-4 sm:mt-0 sm:gap-y-2">
+							{#each subscription.serviceProvider?.appointments ?? [] as appointment}
+								{@const date = friendlyDate(appointment.date)}
+								{@const startAt = appointment.startAt}
+								{@const endAt = getEndAt(
+									appointment.startAt ?? "00:00",
+									appointment.duration ?? "30"
+								)}
+								{#snippet button()}
+									<Button size="xs">Request</Button>
+								{/snippet}
+								{@render appointmentdetails(
+									{ date, location: appointment.location, startAt, endAt },
+									button
+								)}
+							{/each}
+						</div>
+					{/each}
 				</div>
 			</Accordion.Content>
 		</Accordion.Item>

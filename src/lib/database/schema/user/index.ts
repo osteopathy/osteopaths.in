@@ -5,7 +5,7 @@ import { userSessionTable } from "./session";
 import { studentTable } from "../student";
 import { serviceProviderTable } from "../service/provider";
 import { userNotificationSubscriptionTable } from "../notification/subscription";
-import { serviceSupscriptionTable } from "../service/subscription";
+import { serviceSubscriptionTable } from "../service/subscription";
 import { serviceAppointmentTable } from "../service/appointment";
 
 export const userTable = createTable("user", {
@@ -34,7 +34,7 @@ export const userRelation = relations(userTable, ({ one, many }) => ({
 		references: [studentTable.userId]
 	}),
 	serviceProviders: many(serviceProviderTable),
-	serviceSubscriptions: many(serviceSupscriptionTable),
+	serviceSubscriptions: many(serviceSubscriptionTable),
 	appointment: many(serviceAppointmentTable),
 	userNotifications: many(userNotificationSubscriptionTable),
 	userNotificationSubscriptions: many(userNotificationSubscriptionTable)

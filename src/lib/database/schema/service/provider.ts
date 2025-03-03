@@ -3,6 +3,8 @@ import { createTable, id, timestamps } from "../../utils";
 import { userTable } from "../user";
 import { serviceTable } from ".";
 import { relations, type InferSelectModel } from "drizzle-orm";
+import { serviceAppointmentTable } from "./appointment";
+import { serviceSubscriptionTable } from "./subscription";
 
 export const serviceProviderTable = createTable("service_provider", {
 	id,
@@ -16,7 +18,7 @@ export const serviceProviderTable = createTable("service_provider", {
 
 export type ServiceProvider = InferSelectModel<typeof serviceProviderTable>;
 
-export const serviceProviderRelation = relations(serviceProviderTable, ({ one }) => ({
+export const serviceProviderRelation = relations(serviceProviderTable, ({ one, many }) => ({
 	user: one(userTable, {
 		fields: [serviceProviderTable.userId],
 		references: [userTable.id]
@@ -24,5 +26,7 @@ export const serviceProviderRelation = relations(serviceProviderTable, ({ one })
 	service: one(serviceTable, {
 		fields: [serviceProviderTable.serviceId],
 		references: [serviceTable.id]
-	})
+	}),
+	appointments: many(serviceAppointmentTable),
+	subscriptions: many(serviceSubscriptionTable)
 }));

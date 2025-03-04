@@ -143,6 +143,7 @@
 										</Popover.Trigger>
 										<Popover.Content
 											align={isSM.current ? "end" : "center"}
+											side={isSM.current ? "top" : "bottom"}
 											class="bg-layer-3 max-w-xs rounded-2xl px-4 pt-4 pb-5"
 										>
 											<Popover.Arrow class="text-layer-10" />

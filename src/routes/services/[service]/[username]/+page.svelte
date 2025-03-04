@@ -1,18 +1,20 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 	import Avatar from "$lib/components/ui/avatar/avatar.svelte";
-	import Button from "$lib/components/ui/button/button.svelte";
+	import Button, { buttonVariants } from "$lib/components/ui/button/button.svelte";
 	import CalendarEditIcon from "$lib/icons/CalendarEditIcon.svelte";
 	import {
 		appointmentdetails,
 		friendlyDate,
 		getEndAt
 	} from "$lib/snippets/appointment-details.svelte";
+	import { Popover } from "bits-ui";
 	import AppShell from "../../AppShell.svelte";
 	import type { PageData } from "./$types";
 	import SubscribeButton from "./subscribe-button.svelte";
-
+	import { IsMobile } from "$lib/hooks/is-mobile.svelte";
+	import SelectTimeRange from "$lib/components/select-time-range.svelte";
+	let isSM = new IsMobile();
 	let { data }: { data: PageData } = $props();
 </script>
 
@@ -54,7 +56,24 @@
 				{@const startAt = appointment.startAt}
 				{@const endAt = getEndAt(appointment.startAt ?? "00:00", appointment.duration ?? "30")}
 				{#snippet button()}
-					<Button size="xs">Request</Button>
+					<Popover.Root>
+						<Popover.Trigger class={buttonVariants({ variant: "default", size: "xs" })}>
+							Book
+						</Popover.Trigger>
+						<Popover.Content
+							align={isSM.current ? "end" : "center"}
+							class="bg-layer-3 max-w-xs rounded-2xl px-4 pt-4 pb-5"
+						>
+							<Popover.Arrow class="text-layer-10" />
+							<h2 class="text-xl">Predefine your availability</h2>
+							<p class="">
+								To ensure better convenience for you, accordingly time-slots will be assigned to
+								you.
+							</p>
+							<SelectTimeRange from={startAt} to={endAt} />
+							<Button class="mt-2" size="sm">Submit</Button>
+						</Popover.Content>
+					</Popover.Root>
 				{/snippet}
 				{@render appointmentdetails(
 					{ date, location: appointment.location, startAt, endAt },

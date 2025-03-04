@@ -8,7 +8,7 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<AppShell back="/app" heading="Osteopaths" class="mt-4">
+<AppShell back="/app/service" heading="Osteopaths" class="mt-4">
 	<div class="flex w-full items-start gap-x-3 px-2.5 sm:gap-x-6">
 		{#each data.serviceProviderList as serviceProvider}
 			<a

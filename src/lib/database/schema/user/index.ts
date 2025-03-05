@@ -6,7 +6,8 @@ import { studentTable } from "../student";
 import { serviceProviderTable } from "../service/provider";
 import { userNotificationSubscriptionTable } from "../notification/subscription";
 import { serviceSubscriptionTable } from "../service/subscription";
-import { serviceAppointmentTable } from "../service/appointment";
+import { serviceProviderAppointmentTable } from "../service/provider/appointment";
+import { serviceProviderAppointmentRequestTable } from "../service/provider/appointment/request";
 
 export const userTable = createTable("user", {
 	id,
@@ -35,7 +36,8 @@ export const userRelation = relations(userTable, ({ one, many }) => ({
 	}),
 	serviceProviders: many(serviceProviderTable),
 	serviceSubscriptions: many(serviceSubscriptionTable),
-	appointment: many(serviceAppointmentTable),
+	appointments: many(serviceProviderAppointmentTable),
+	requests: many(serviceProviderAppointmentRequestTable),
 	userNotifications: many(userNotificationSubscriptionTable),
 	userNotificationSubscriptions: many(userNotificationSubscriptionTable)
 }));

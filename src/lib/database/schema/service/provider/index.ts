@@ -1,10 +1,12 @@
 import { text } from "drizzle-orm/sqlite-core";
-import { createTable, id, timestamps } from "../../utils";
-import { userTable } from "../user";
-import { serviceTable } from ".";
+import { createTable, id, timestamps } from "../../../utils";
+import { userTable } from "../../user";
+import { serviceTable } from "..";
 import { relations, type InferSelectModel } from "drizzle-orm";
-import { serviceAppointmentTable } from "./appointment";
-import { serviceSubscriptionTable } from "./subscription";
+import { serviceProviderAppointmentTable } from "./appointment";
+import { serviceSubscriptionTable } from "../subscription";
+import { serviceProviderDateWiseScheduleTable } from "./date_wise_schedule";
+import { serviceProviderAppointmentRequestTable } from "./appointment/request";
 
 export const serviceProviderTable = createTable("service_provider", {
 	id,
@@ -13,6 +15,7 @@ export const serviceProviderTable = createTable("service_provider", {
 		.notNull(),
 	serviceId: text("service_id").references(() => serviceTable.id, { onDelete: "no action" }),
 	username: text("username").unique(),
+	location: text("location"),
 	...timestamps
 });
 
@@ -27,6 +30,8 @@ export const serviceProviderRelation = relations(serviceProviderTable, ({ one, m
 		fields: [serviceProviderTable.serviceId],
 		references: [serviceTable.id]
 	}),
-	appointments: many(serviceAppointmentTable),
-	subscriptions: many(serviceSubscriptionTable)
+	appointments: many(serviceProviderAppointmentTable),
+	subscriptions: many(serviceSubscriptionTable),
+	appointmentRequests: many(serviceProviderAppointmentRequestTable),
+	dateWiseScheduleList: many(serviceProviderDateWiseScheduleTable)
 }));

@@ -29,6 +29,11 @@ const RequiredIcons = [
 		name: "Person"
 	},
 	{
+		outline: "fluent:people-community-24-regular",
+		solid: "fluent:people-community-24-filled",
+		name: "People"
+	},
+	{
 		path: "logos:google-icon",
 		name: "Google"
 	},

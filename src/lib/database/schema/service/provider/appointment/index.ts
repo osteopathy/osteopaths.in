@@ -1,7 +1,7 @@
 import { text } from "drizzle-orm/sqlite-core";
-import { createTable, id, timestamps } from "../../utils";
-import { serviceProviderTable } from "./provider";
-import { userTable } from "../user";
+import { createTable, id, timestamps } from "../../../../utils";
+import { serviceProviderTable } from "..";
+import { userTable } from "../../../user";
 import { relations, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
 import { customType } from "drizzle-orm/sqlite-core";
 
@@ -30,7 +30,7 @@ export const date = customType<{ data: Date; driverData: string }>({
 	}
 });
 
-export const serviceAppointmentTable = createTable("service_appointment", {
+export const serviceProviderAppointmentTable = createTable("service_provider_appointment", {
 	id,
 	userId: text("user_id").references(() => userTable.id, { onDelete: "cascade" }),
 	serviceProviderId: text("service_provider_id").references(() => serviceProviderTable.id),
@@ -42,16 +42,21 @@ export const serviceAppointmentTable = createTable("service_appointment", {
 	...timestamps
 });
 
-export type ServiceAppointment = InferSelectModel<typeof serviceAppointmentTable>;
-export type InsertServiceAppointment = InferInsertModel<typeof serviceAppointmentTable>;
+export type ServiceProviderAppointment = InferSelectModel<typeof serviceProviderAppointmentTable>;
+export type InsertServiceProviderAppointment = InferInsertModel<
+	typeof serviceProviderAppointmentTable
+>;
 
-export const serviceAppointmentRelation = relations(serviceAppointmentTable, ({ one }) => ({
-	user: one(userTable, {
-		fields: [serviceAppointmentTable.userId],
-		references: [userTable.id]
-	}),
-	serviceProvider: one(serviceProviderTable, {
-		fields: [serviceAppointmentTable.serviceProviderId],
-		references: [serviceProviderTable.id]
+export const serviceProviderAppointmentRelation = relations(
+	serviceProviderAppointmentTable,
+	({ one }) => ({
+		user: one(userTable, {
+			fields: [serviceProviderAppointmentTable.userId],
+			references: [userTable.id]
+		}),
+		serviceProvider: one(serviceProviderTable, {
+			fields: [serviceProviderAppointmentTable.serviceProviderId],
+			references: [serviceProviderTable.id]
+		})
 	})
-}));
+);

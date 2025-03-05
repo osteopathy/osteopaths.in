@@ -3,18 +3,17 @@
 	import Avatar from "$lib/components/ui/avatar/avatar.svelte";
 	import Button, { buttonVariants } from "$lib/components/ui/button/button.svelte";
 	import CalendarEditIcon from "$lib/icons/CalendarEditIcon.svelte";
-	import {
-		appointmentdetails,
-		friendlyDate,
-		getEndAt
-	} from "$lib/snippets/appointment-details.svelte";
+	import { appointmentrequest } from "$lib/snippets/appointment-details.svelte";
 	import { Popover } from "bits-ui";
 	import AppShell from "../../AppShell.svelte";
 	import type { PageData } from "./$types";
 	import SubscribeButton from "./subscribe-button.svelte";
 	import { IsMobile } from "$lib/hooks/is-mobile.svelte";
 	import SelectTimeRange from "$lib/components/select-time-range.svelte";
+	import { enhance } from "$app/forms";
+
 	let isSM = new IsMobile();
+	let loading = $state(false);
 	let { data }: { data: PageData } = $props();
 </script>
 
@@ -51,7 +50,103 @@
 			{/if}
 		</div>
 		<div class="mt-4 flex w-full flex-col gap-y-4 sm:mt-0 sm:gap-y-2">
-			{#each data.serviceProvider?.appointments ?? [] as appointment}
+			{#each data.appointmentRequests as { id, date, startAt, endAt }}
+				{#if date && startAt}
+					{#snippet button()}
+						<form
+							action="/services/{page.params.service}/{page.params.username}?/withdrawrequest"
+							method="POST"
+							use:enhance={() => {
+								loading = true;
+								return async ({ result, update }) => {
+									if (result.type === "success") {
+										console.log("Appointment request submitted successfully.");
+									}
+									await update(); // call update to trigger the default logic
+									loading = false;
+								};
+							}}
+						>
+							<input type="hidden" name="appointment_request_id" value={id} />
+							<Button disabled={loading} variant="destructive">Withdraw Request</Button>
+						</form>
+					{/snippet}
+
+					{@render appointmentrequest(
+						{
+							date,
+							startAt,
+							endAt
+						},
+						button
+					)}
+				{/if}
+			{/each}
+			{#each data.serviceProvider?.dateWiseScheduleList ?? [] as { date, startAt, endAt }}
+				{#if date && startAt}
+					{#snippet button()}
+						<Popover.Root>
+							<Popover.Trigger class={buttonVariants({ variant: "default", size: "xs" })}>
+								Book
+							</Popover.Trigger>
+							<Popover.Content
+								align={isSM.current ? "end" : "center"}
+								side={isSM.current ? "top" : "bottom"}
+								class="bg-layer-3 max-w-xs rounded-2xl px-4 pt-4 pb-5"
+							>
+								<Popover.Arrow class="text-layer-10" />
+								<h2 class="text-xl">Predefine your availability</h2>
+								<p class="">
+									To ensure better convenience for you, accordingly time-slots will be assigned to
+									you.
+								</p>
+								<form
+									action="/services/{page.params.service}/{page.params
+										.username}?/appointmentrequest"
+									method="POST"
+									use:enhance={() => {
+										loading = true;
+										return async ({ result, update }) => {
+											if (result.type === "success") {
+												console.log("Appointment request submitted successfully.");
+											}
+											await update(); // call update to trigger the default logic
+											loading = false;
+										};
+									}}
+								>
+									<input
+										type="hidden"
+										id="service_provider_id"
+										name="service_provider_id"
+										value={data.serviceProvider?.id}
+									/>
+									<input
+										type="hidden"
+										id="date"
+										name="date"
+										value={(() => {
+											const formattedDate = date.toLocaleString("en-us", {
+												day: "2-digit",
+												month: "2-digit",
+												year: "numeric"
+											});
+											// returned as %mm/%dd/%yyyy;
+											const [month, day, year] = formattedDate.split("/");
+											// stored as %dd/%mm/%yyyy;
+											return `${day}/${month}/${year}`;
+										})()}
+									/>
+									<SelectTimeRange from={startAt} to={endAt} />
+									<Button disabled={loading} type="submit" size="sm">Submit</Button>
+								</form>
+							</Popover.Content>
+						</Popover.Root>
+					{/snippet}
+					{@render appointmentrequest({ date, startAt, endAt }, button)}
+				{/if}
+			{/each}
+			<!-- {#each data.serviceProvider?.appointments ?? [] as appointment}
 				{@const date = friendlyDate(appointment.date)}
 				{@const startAt = appointment.startAt}
 				{@const endAt = getEndAt(appointment.startAt ?? "00:00", appointment.duration ?? "30")}
@@ -80,7 +175,7 @@
 					{ date, location: appointment.location, startAt, endAt },
 					button
 				)}
-			{/each}
+			{/each} -->
 			{#if data.serviceProvider?.appointments?.length === 0}
 				<p class="text-muted-foreground text-lg">No appointments available.</p>
 			{/if}

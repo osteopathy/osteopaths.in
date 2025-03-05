@@ -1,7 +1,7 @@
 import type {
 	ServiceAppointment,
 	InsertServiceAppointment
-} from "$lib/database/schema/service/appointment";
+} from "$lib/database/schema/service/provider/appointment";
 
 export const serviceAppointment = {
 	getAll: async () => {

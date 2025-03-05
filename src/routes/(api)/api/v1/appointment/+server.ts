@@ -4,7 +4,7 @@ import {
 	serviceAppointmentTable,
 	type ServiceAppointment,
 	type InsertServiceAppointment
-} from "$lib/database/schema/service/appointment";
+} from "$lib/database/schema/service/provider/appointment";
 import { and, eq } from "drizzle-orm";
 
 export const GET: RequestHandler = async (event) => {

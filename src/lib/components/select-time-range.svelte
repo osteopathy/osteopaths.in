@@ -68,12 +68,12 @@
 
 <div class="my-2 flex gap-x-2">
 	<div class="flex flex-col gap-y-2">
-		<Label for="start-at">From</Label>
+		<Label for="start_at">From</Label>
 		<div class="grid grid-cols-1">
 			<select
 				bind:value={selectedStartAt}
-				id="start-at"
-				name="start-at"
+				id="start_at"
+				name="start_at"
 				class="border-input col-start-1 row-start-1 w-full appearance-none rounded-md border py-1.5 pr-8 pl-3 text-base sm:text-sm/6"
 			>
 				{#each options as option}
@@ -96,12 +96,12 @@
 		</div>
 	</div>
 	<div class="flex flex-col gap-y-2">
-		<Label for="end-at">To</Label>
+		<Label for="end_at">To</Label>
 		<div class="grid grid-cols-1">
 			<select
 				bind:value={selectedEndAt}
-				id="end-at"
-				name="end-at"
+				id="end_at"
+				name="end_at"
 				class="border-input col-start-1 row-start-1 w-full appearance-none rounded-md border py-1.5 pr-8 pl-3 text-base sm:text-sm/6"
 			>
 				{#each options2 as option}

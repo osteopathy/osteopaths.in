@@ -15,7 +15,7 @@
 
 <header class="flex w-full max-w-xl items-center justify-between px-2.5 py-4">
 	{@render header()}
-	{#if page.url.pathname === "/app"}
+	{#if page.url.pathname === `/${page.data?.user?.id}`}
 		<SelectTheme />
 	{/if}
 </header>

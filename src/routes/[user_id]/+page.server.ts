@@ -5,22 +5,28 @@ import { eq } from "drizzle-orm";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { z } from "zod";
+import type { Actions, PageServerLoad } from "./$types";
 
 const schema = z.object({
 	name: z.string().nullable(),
 	phone: z.string().nullable()
 });
-export const load = async (event) => {
+
+export const load: PageServerLoad = async (event) => {
 	if (!event.locals.user) redirect(302, "/");
+	const pageuser = (event.locals.user.id === event.params.user_id) ? event.locals.user : (
+		await db.query.userTable.findFirst({
+			where: eq(userTable.id, event.params.user_id)
+		})
+	)
 	const form = await superValidate(
-		{ name: event.locals.user?.name, phone: event.locals.user?.phone },
+		{ name: pageuser?.name, phone: pageuser?.phone },
 		zod(schema)
 	);
-
-	return { form };
+	return { form, pageuser };
 };
 
-export const actions = {
+export const actions: Actions = {
 	default: async ({ request, locals, cookies }) => {
 		if (!locals.user) return fail(401, { message: "Unauthorized" });
 
@@ -30,8 +36,6 @@ export const actions = {
 			return fail(400, { form });
 		}
 
-		const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-		console.log("Updating", form.data, locals.user);
 		const res = await db
 			.update(userTable)
 			.set({
@@ -48,7 +52,6 @@ export const actions = {
 			expires: new Date(Date.now() + 3600)
 		});
 
-		console.log("RES", res.rows);
 		return message(form, "Form posted successfully!");
 	}
 };

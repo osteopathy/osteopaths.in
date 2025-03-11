@@ -4,7 +4,10 @@
 
 	import "../app.css";
 	import { ModeWatcher } from "mode-watcher";
-	let { children } = $props();
+	import type { LayoutProps } from "./$types";
+	import { setIsLoggedIn } from "./utils.svelte";
+	let { children, data }: LayoutProps = $props();
+	setIsLoggedIn(!!data?.user);
 	let webManifest = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : "");
 </script>
 
@@ -12,7 +15,7 @@
 	{#if pwaAssetsHead.themeColor}
 		<meta name="theme-color" content={pwaAssetsHead.themeColor.content} />
 	{/if}
-	{#each pwaAssetsHead.links as link}
+	{#each pwaAssetsHead.links as link, i (i)}
 		<link {...link} />
 	{/each}
 	<!-- eslint-disable-next-line -->

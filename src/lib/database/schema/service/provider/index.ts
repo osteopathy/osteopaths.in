@@ -15,7 +15,7 @@ export const serviceProviderTable = createTable("service_provider", {
 		.notNull(),
 	serviceId: text("service_id").references(() => serviceTable.id, { onDelete: "no action" }),
 	username: text("username").unique(),
-	location: text("location"),
+	location: text("location").default("Sri Sri University"),
 	...timestamps
 });
 

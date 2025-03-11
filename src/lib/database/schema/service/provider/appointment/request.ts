@@ -1,10 +1,9 @@
-import { integer, text } from "drizzle-orm/sqlite-core";
-import { createTable, id, timestamps } from "../../../../utils";
+import { text } from "drizzle-orm/sqlite-core";
+import { createTable, id, timestamps, date } from "../../../../utils";
 import { userTable } from "../../../user";
-import { date } from ".";
 import { serviceProviderTable } from "../index";
 import { relations } from "drizzle-orm";
-import type { unknown } from "zod";
+import { serviceProviderDateWiseScheduleTable } from "../date_wise_schedule";
 
 // Pending: The initial state, awaiting processing.
 // Accepted: The request has been approved.
@@ -15,6 +14,7 @@ import type { unknown } from "zod";
 
 export const WithDrawReasons = {
 	AnotherRequestAccepted: "Another Request is Accepted by ...",
+	UserCancelled: "User Cancelled",
 	unknown: "unknown"
 };
 
@@ -24,14 +24,13 @@ export const serviceProviderAppointmentRequestTable = createTable(
 		id,
 		userId: text("user_id").references(() => userTable.id, { onDelete: "cascade" }),
 		serviceProviderId: text("service_provider_id").references(() => serviceProviderTable.id),
+		dateWiseScheduleId: text("date_wise_schedule_id").references(() => serviceProviderDateWiseScheduleTable.id),
 		date: date("date"), // %dd/%mm/%yyyy
 		startAt: text("start_at"), // user preferred start time
 		endAt: text("end_at"), // user preferred availability time
 		note: text("note"),
-		reply: text("reply"),
 		status: text("status", { enum: ["idle", "accepted", "withdrawn"] }),
 		withdrawnReason: text("withdrawn_reason"),
-		userAgreed: integer("user_agreed", { mode: "boolean" }).default(false),
 		...timestamps
 	}
 );
@@ -46,6 +45,11 @@ export const serviceProviderAppointmentRequestRelation = relations(
 		serviceProvider: one(serviceProviderTable, {
 			fields: [serviceProviderAppointmentRequestTable.serviceProviderId],
 			references: [serviceProviderTable.id]
-		})
+		}),
+		dateWiseSchedule: one(serviceProviderDateWiseScheduleTable, {
+			fields: [serviceProviderAppointmentRequestTable.dateWiseScheduleId],
+			references: [serviceProviderDateWiseScheduleTable.id]
+		}),
+		appointment: one(serviceProviderAppointmentRequestTable),
 	})
 );

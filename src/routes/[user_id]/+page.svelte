@@ -15,10 +15,11 @@
 	import { enhance } from "$app/forms";
 	import type { PageProps } from "./$types";
 	import { page } from "$app/state";
+	import { isCurrentUser } from "./utils.svelte";
 
 	const message = page.url.searchParams.get("message");
 	let { data }: PageProps = $props();
-	let picture = $state(data.user?.picture ?? null);
+	let picture = $state(data.pageuser?.picture ?? null);
 
 	const {
 		form,
@@ -39,24 +40,26 @@
 		<Avatar
 			class="-z-10 -mr-8 size-52"
 			src={picture}
-			alt="{data.user?.name} Profile Image"
+			alt="{data.pageuser?.name} Profile Image"
 			fallback="US"
 		/>
-		<EditImageDialog
-			imageSrc={picture}
-			handleUploadImage={async (blobURL) => {
-				if (!data.user || !blobURL) return;
-				const res = await uploadImageToCloudinary(blobURL);
-				if (!res) return;
-				picture = res.url;
-				await syncCloudinaryURLToDatabase(data.user.id, res.url);
-			}}
-			handleDeleteImage={async () => {
-				if (!data.user || !data.user.picture) return;
-				await deleteImage(data.user.id, data.user?.picture);
-				picture = null;
-			}}
-		/>
+		{#if isCurrentUser()}
+			<EditImageDialog
+				imageSrc={picture}
+				handleUploadImage={async (blobURL) => {
+					if (!data.pageuser || !blobURL) return;
+					const res = await uploadImageToCloudinary(blobURL);
+					if (!res) return;
+					picture = res.url;
+					await syncCloudinaryURLToDatabase(data.pageuser.id, res.url);
+				}}
+				handleDeleteImage={async () => {
+					if (!data.pageuser || !data.pageuser.picture) return;
+					await deleteImage(data.pageuser.id, data.pageuser?.picture);
+					picture = null;
+				}}
+			/>
+		{/if}
 	</div>
 	{#if message}
 		<p class="text-center font-medium">{message}</p>
@@ -64,57 +67,74 @@
 	<form method="POST" use:formEnhance class="flex w-full flex-col gap-y-6 px-4 sm:px-12">
 		<div class="flex flex-col gap-y-2">
 			<Label for="name">Display Name</Label>
-			<Input id="name" bind:value={$form.name} name="name" type="text" />
+			<Input
+				readonly={!isCurrentUser()}
+				id="name"
+				bind:value={$form.name}
+				name="name"
+				type="text"
+			/>
 		</div>
 		<div class="flex flex-col gap-y-2">
 			<Label for="phone">Phone Number</Label>
-			<Input id="phone" name="phone" type="text" bind:value={$form.phone} />
+			<Input
+				readonly={!isCurrentUser()}
+				id="phone"
+				name="phone"
+				type="text"
+				bind:value={$form.phone}
+			/>
 		</div>
-		<Button
-			type="submit"
-			disabled={!isTainted($tainted) || $delayed}
-			class="w-max {!$delayed && 'disabled:hidden'}"
-		>
-			{#if $delayed}
-				Updating
-			{:else}
-				Update
-			{/if}
-		</Button>
+		{#if isCurrentUser()}
+			<Button
+				type="submit"
+				disabled={!isTainted($tainted) || $delayed}
+				class="w-max {!$delayed && 'disabled:hidden'}"
+			>
+				{#if $delayed}
+					Updating
+				{:else}
+					Update
+				{/if}
+			</Button>
+		{/if}
 	</form>
 	<div class="flex w-full flex-col gap-y-6 px-4 sm:px-12">
 		<div class="flex flex-col items-start gap-y-2 overflow-auto">
-			<span class="text-sm font-medium">Personal Google Account</span>
-			{#if data.user?.email}
+			{#if data.pageuser?.email}
+				<span class="text-sm font-medium">Personal Google Account</span>
 				<div class={buttonVariants({ variant: "secondary" })}>
 					<GoogleIcon />
-					{data.user?.email}
+					{data.pageuser?.email}
 				</div>
-			{:else}
+			{:else if isCurrentUser()}
+				<span class="text-sm font-medium">Personal Google Account</span>
 				<Button href="/login/google?connect=personal-mail" variant="secondary">
 					<GoogleIcon />
 					Connect Google Account
 				</Button>
 			{/if}
 		</div>
-
 		<div class="flex flex-col items-start gap-y-2 overflow-auto">
-			<span class="text-sm font-medium">University Gmail</span>
-			{#if data.user?.universityMail}
+			{#if data.pageuser?.universityMail}
+				<span class="text-sm font-medium">University Gmail</span>
 				<div class={buttonVariants({ variant: "secondary" })}>
-					{data.user?.universityMail}
+					{data.pageuser?.universityMail}
 				</div>
-			{:else}
+			{:else if isCurrentUser()}
+				<span class="text-sm font-medium">Personal Google Account</span>
 				<Button href="/login/google?connect=university-mail" variant="secondary">
 					Connect University Account
 				</Button>
 			{/if}
 		</div>
 	</div>
-	<div class="flex w-full items-center justify-between px-12">
-		<div></div>
-		<form method="post" use:enhance action="/?/logout">
-			<Button variant="destructive">Logout</Button>
-		</form>
-	</div>
+	{#if isCurrentUser()}
+		<div class="flex w-full items-center justify-between px-12">
+			<div></div>
+			<form method="post" use:enhance action="/?/logout">
+				<Button variant="destructive">Logout</Button>
+			</form>
+		</div>
+	{/if}
 </AppShell>

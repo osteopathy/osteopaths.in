@@ -87,7 +87,17 @@ const RequiredIcons = [
 		outline: "fluent:alert-on-24-regular",
 		solid: "fluent:alert-on-24-filled",
 		name: "BellRing"
-	}
+	},
+	{
+		outline: "fluent:more-vertical-24-regular",
+		solid: "fluent:more-vertical-24-filled",
+		name: "Menu"
+	},
+	{
+		outline: "fluent:add-24-regular",
+		solid: "fluent:add-24-filled",
+		name: "Plus"
+	},
 ];
 
 const getName = (name) => "../../src/lib/icons/" + name + "Icon" + ".svelte";

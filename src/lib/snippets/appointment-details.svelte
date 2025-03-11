@@ -55,7 +55,9 @@
 			<span></span>
 		</div>
 		<div class="flex w-full items-center justify-between gap-x-4 sm:w-max">
-			<span class="text-foreground text-lg">{details.startAt} - {details.endAt}</span>
+			<span class="text-foreground text-lg"
+				>{details.startAt} - {!details.endAt ? "onwards" : details.endAt}</span
+			>
 			{@render button()}
 		</div>
 	</div>

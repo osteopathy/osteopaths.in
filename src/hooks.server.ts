@@ -29,7 +29,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 		return resolve(event);
 	}
 
-	let expiresAt = value.payload.exp * 1000; // ms;
+	const expiresAt = value.payload.exp * 1000; // ms;
 	// validate token after every 1 day
 	if (Date.now() >= expiresAt - 1000 * 60 * 60 * 24 * 28 || hardRefresh === "TRUE") {
 		if (hardRefresh === "TRUE")

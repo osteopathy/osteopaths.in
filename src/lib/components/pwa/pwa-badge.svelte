@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { useRegisterSW } from "virtual:pwa-register/svelte";
+	import Button from "../ui/button/button.svelte";
+	import InfoIcon from "$lib/icons/InfoIcon.svelte";
 
 	// check for updates every hour
 	const period = 60 * 60 * 1000;
@@ -55,46 +57,20 @@
 </script>
 
 {#if toast}
-	<div class="pwa-toast" role="alert" aria-labelledby="toast-message">
-		<div class="message">
-			<span id="toast-message">
-				{message}
-			</span>
-		</div>
-		<div class="buttons">
-			{#if $needRefresh}
-				<button type="button" onclick={() => updateServiceWorker(true)}> Reload </button>
-			{/if}
-			<button type="button" onclick={close}> Close </button>
+	<div
+		class="border-border bg-layer-9 shadow-layer-10 fixed right-0 bottom-0 z-1 m-4 flex rounded-md border p-4 shadow-inner"
+		role="alert"
+		aria-labelledby="toast-message"
+	>
+		<InfoIcon class="shrink-0" />
+		<div class="ml-3">
+			<h3 class="text-layer-12 text-sm font-medium">{message}</h3>
+			<div class="-mx-2 mt-2 flex gap-x-3">
+				{#if $needRefresh}
+					<Button size="sm" type="button" onclick={() => updateServiceWorker(true)}>Reload</Button>
+				{/if}
+				<Button variant="default" size="sm" type="button" onclick={close}>Close</Button>
+			</div>
 		</div>
 	</div>
 {/if}
-
-<style>
-	.pwa-toast {
-		position: fixed;
-		right: 0;
-		bottom: 0;
-		margin: 16px;
-		padding: 12px;
-		border: 1px solid #8885;
-		border-radius: 4px;
-		z-index: 2;
-		text-align: left;
-		box-shadow: 3px 4px 5px 0 #8885;
-		background-color: white;
-	}
-	.pwa-toast .message {
-		margin-bottom: 8px;
-	}
-	.pwa-toast .buttons {
-		display: flex;
-	}
-	.pwa-toast button {
-		border: 1px solid #8885;
-		outline: none;
-		margin-right: 5px;
-		border-radius: 2px;
-		padding: 3px 10px;
-	}
-</style>

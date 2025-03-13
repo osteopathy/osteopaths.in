@@ -1,0 +1,1 @@
+ALTER TABLE `service_appointment` ADD `location` text;

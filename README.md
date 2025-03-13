@@ -1,38 +1,93 @@
-# sv
+# SvelteKit Boilerplate Project
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+## Overview
 
-## Creating a project
+This is a modern full-stack SvelteKit application that is type-safe with TypeScript. It integrates with a SqlLite database using Drizzle ORM, includes UI components from Bits-UI, and uses Lucia and JWT for authentication.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Tech Stack
 
-```bash
-# create a new project in the current directory
-npx sv create
+- **Framework**: SvelteKit (latest version) with runes
+- **Language**: TypeScript 5.0+
+- **Database**: SqlLite
+- **ORM**: Drizzle ORM
+- **UI Components**: Bits-UI
+- **Authentication**: Lucia and JWT
+- **Node.js**: 23+
+- **Package Manager**: npm
 
-# create a new project in my-app
-npx sv create my-app
+## Project Structure
+
+```plaintext
+**Development Guidelines**
+
+Use TypeScript for all files
+Follow SvelteKit filesystem routing
+Keep components small and reusable
+Use server-side validation
+Implement proper error handling
+
+**Authentication Requirements**
+OAuth providers Google
+
+**Database Schema**
+Users table
+Sessions table
+Student table
+
+Service table
+Service Appointments table
+Service Providers table
+Service Subscription table
+
+Push Notification table
+Notification Subscription table
 ```
 
-## Developing
+## Getting Started
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Prerequisites
 
-```bash
-npm run dev
+- Node.js 23+
+- npm
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+### Installation
 
-## Building
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd <project-directory>
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-To create a production version of your app:
+### Running the Project
 
-```bash
-npm run build
-```
+1. Start the development server:
+   ```bash
+   npm run dev
+   ```
+2. Open your browser and navigate to `http://localhost:3000`.
 
-You can preview the production build with `npm run preview`.
+### Building for Production
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+1. Build the project:
+   ```bash
+   npm run build
+   ```
+2. Preview the production build:
+   ```bash
+   npm run preview
+   ```
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License.

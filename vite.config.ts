@@ -3,6 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import icon from "unplugin-icons/vite";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
+import { kitRoutes } from 'vite-plugin-kit-routes';
 
 export default defineConfig({
 	server: {
@@ -10,6 +11,9 @@ export default defineConfig({
 	},
 	plugins: [
 		sveltekit(),
+		kitRoutes({
+			generated_file_path: 'src/lib/routes_helper.ts'
+		}),
 		tailwindcss(),
 		icon({
 			autoInstall: true,

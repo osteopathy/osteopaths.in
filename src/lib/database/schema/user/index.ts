@@ -5,8 +5,9 @@ import { userSessionTable } from "./session";
 import { studentTable } from "../student";
 import { serviceProviderTable } from "../service/provider";
 import { userNotificationSubscriptionTable } from "../notification/subscription";
-import { serviceSupscriptionTable } from "../service/subscription";
-import { serviceAppointmentTable } from "../service/appointment";
+import { serviceSubscriptionTable } from "../service/subscription";
+import { serviceProviderAppointmentTable } from "../service/provider/appointment";
+import { serviceProviderAppointmentRequestTable } from "../service/provider/appointment/request";
 
 export const userTable = createTable("user", {
 	id,
@@ -21,7 +22,7 @@ export const userTable = createTable("user", {
 		student_id?: string;
 	}>(),
 	name: text("name"),
-	role: text("role", { enum: ["user", "student", "service_provider"] }).default("user"),
+	role: text("role", { enum: ["user", "student", "service_provider", "guest"] }).default("user"),
 	...timestamps
 });
 
@@ -34,7 +35,9 @@ export const userRelation = relations(userTable, ({ one, many }) => ({
 		references: [studentTable.userId]
 	}),
 	serviceProviders: many(serviceProviderTable),
-	serviceSubscriptions: many(serviceSupscriptionTable),
-	appointment: many(serviceAppointmentTable),
-	notificationSubscriptions: many(userNotificationSubscriptionTable)
+	serviceSubscriptions: many(serviceSubscriptionTable),
+	appointments: many(serviceProviderAppointmentTable),
+	requests: many(serviceProviderAppointmentRequestTable),
+	userNotifications: many(userNotificationSubscriptionTable),
+	userNotificationSubscriptions: many(userNotificationSubscriptionTable)
 }));

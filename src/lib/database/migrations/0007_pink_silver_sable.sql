@@ -1,0 +1,1 @@
+ALTER TABLE `service_provider_appointment` RENAME COLUMN "duration" TO "end_at";

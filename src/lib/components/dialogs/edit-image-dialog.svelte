@@ -120,7 +120,7 @@
 	let pixelCrop: { x: number; y: number; width: number; height: number } | null = $state(null);
 	let croppedImage: string | null = $state(null);
 
-	function onFileSelected(e) {
+	function onFileSelected(e: any) {
 		let imageFile = e.target.files[0];
 		let reader = new FileReader();
 		reader.onload = (e) => {

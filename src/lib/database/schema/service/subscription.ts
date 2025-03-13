@@ -4,7 +4,7 @@ import { userTable } from "../user";
 import { serviceProviderTable } from "./provider";
 import { relations, type InferSelectModel } from "drizzle-orm";
 
-export const serviceSupscriptionTable = createTable("service_subscription", {
+export const serviceSubscriptionTable = createTable("service_subscription", {
 	id,
 	userId: text("user_id")
 		.references(() => userTable.id, { onDelete: "cascade" })
@@ -13,15 +13,15 @@ export const serviceSupscriptionTable = createTable("service_subscription", {
 	...timestamps
 });
 
-export type ServiceSubscription = InferSelectModel<typeof serviceSupscriptionTable>;
+export type ServiceSubscription = InferSelectModel<typeof serviceSubscriptionTable>;
 
-export const ServiceSubscriptionRelation = relations(serviceSupscriptionTable, ({ one }) => ({
+export const ServiceSubscriptionRelation = relations(serviceSubscriptionTable, ({ one }) => ({
 	user: one(userTable, {
-		fields: [serviceSupscriptionTable.userId],
+		fields: [serviceSubscriptionTable.userId],
 		references: [userTable.id]
 	}),
 	serviceProvider: one(serviceProviderTable, {
-		fields: [serviceSupscriptionTable.serviceProviderId],
+		fields: [serviceSubscriptionTable.serviceProviderId],
 		references: [serviceProviderTable.id]
 	})
 }));

@@ -1,0 +1,1 @@
+ALTER TABLE `service_provider_appointment` ADD `request_id` text REFERENCES service_provider_appointment_request(id);

@@ -7,7 +7,7 @@ export const userSessionTable = createTable("user_session", {
 	id,
 	userId: text("user_id")
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => userTable.id, { onDelete: "cascade" }),
 	expiresAt: integer("expires_at", {
 		mode: "timestamp"
 	}).notNull(),

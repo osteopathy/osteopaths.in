@@ -56,9 +56,7 @@ export const load: PageServerLoad = async (event) => {
 			}
 		}
 	});
-	if (subscriptions.length === 0) {
-		return redirect(302, '/services/osteopathy')
-	}
+
 	const appointmentrequest = appointmentRequests.find((e) => e.status === 'accepted');
 
 	const appointments = appointmentrequest ? await db.query.serviceProviderAppointmentTable.findMany({

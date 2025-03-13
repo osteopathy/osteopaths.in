@@ -345,10 +345,17 @@
 				</Accordion.Item>
 			{:else}
 				<!-- Create a Blank Space -->
-				<Button class="group pr-2.5" href="/services/osteopathy" variant="secondary">
-					Subscribe
-					<ArrowRightIcon />
-				</Button>
+				<div class="flex w-full flex-col items-center">
+					<h2 class="mt-12 text-center text-2xl font-bold">No Subscribed Services</h2>
+					<p class="mt-6 max-w-xs text-center text-lg">
+						To continue using application with ease subscribe to atleast with one osteopath to get
+						connected with them.
+					</p>
+					<Button class="group mt-6 pr-2.5" href="/services/osteopathy" variant="secondary">
+						Subscribe
+						<ArrowRightIcon />
+					</Button>
+				</div>
 			{/if}
 		</Accordion.Root>
 	{/if}

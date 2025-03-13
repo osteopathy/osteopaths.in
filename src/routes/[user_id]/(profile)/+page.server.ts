@@ -28,10 +28,10 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals }) => {
-		if (!locals.user) return fail(401, { message: "Unauthorized" });
+	default: async (event) => {
+		if (!event.locals.user) return fail(401, { message: "Unauthorized" });
 
-		const form = await superValidate(request, zod(schema));
+		const form = await superValidate(event.request, zod(schema));
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -43,8 +43,8 @@ export const actions: Actions = {
 				name: form.data.name,
 				phone: form.data.phone
 			})
-			.where(eq(userTable.id, locals.user?.id));
-		await syncCurrentUser();
+			.where(eq(userTable.id, event.locals.user?.id));
+		await syncCurrentUser(event);
 		return message(form, "Form posted successfully!");
 	}
 };

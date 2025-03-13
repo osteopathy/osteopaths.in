@@ -39,6 +39,9 @@ export const actions: Actions = {
 	newschedule: async (event) => {
 		if (!event.locals.user) redirect(302, "/");
 		const form = await superValidate(event.request, zod(scheduleSchema));
+		if (!form.valid) {
+			return fail(400, { form });
+		}
 		const service_provider_id = event.params.service_provider_id;
 		const result = await db.query.serviceProviderDateWiseScheduleTable.findFirst({
 			where: and(

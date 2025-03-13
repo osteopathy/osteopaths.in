@@ -2,8 +2,9 @@ import { text } from "drizzle-orm/sqlite-core";
 import { createTable, id, timestamps, date } from "../../../../utils";
 import { userTable } from "../../../user";
 import { serviceProviderTable } from "../index";
-import { relations } from "drizzle-orm";
+import { relations, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
 import { serviceProviderDateWiseScheduleTable } from "../date_wise_schedule";
+import { serviceProviderAppointmentTable } from ".";
 
 // Pending: The initial state, awaiting processing.
 // Accepted: The request has been approved.
@@ -35,6 +36,13 @@ export const serviceProviderAppointmentRequestTable = createTable(
 	}
 );
 
+export type ServiceProviderAppointmentRequest = InferSelectModel<
+	typeof serviceProviderAppointmentRequestTable
+>;
+export type InsertServiceProviderAppointmentRequest = InferInsertModel<
+	typeof serviceProviderAppointmentRequestTable
+>;
+
 export const serviceProviderAppointmentRequestRelation = relations(
 	serviceProviderAppointmentRequestTable,
 	({ one }) => ({
@@ -50,6 +58,6 @@ export const serviceProviderAppointmentRequestRelation = relations(
 			fields: [serviceProviderAppointmentRequestTable.dateWiseScheduleId],
 			references: [serviceProviderDateWiseScheduleTable.id]
 		}),
-		appointment: one(serviceProviderAppointmentRequestTable),
+		// appointment: many(serviceProviderAppointmentRequestTable),
 	})
 );

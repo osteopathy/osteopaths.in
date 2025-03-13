@@ -22,7 +22,7 @@ export const userTable = createTable("user", {
 		student_id?: string;
 	}>(),
 	name: text("name"),
-	role: text("role", { enum: ["user", "student", "service_provider"] }).default("user"),
+	role: text("role", { enum: ["user", "student", "service_provider", "guest"] }).default("user"),
 	...timestamps
 });
 

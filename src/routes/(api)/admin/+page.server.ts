@@ -39,7 +39,7 @@ export const actions: Actions = {
 					.setExpirationTime(session.expiresAt)
 					.encrypt(secret);
 				setJWTTokenCookie(event, jwt, session.expiresAt);
-				return redirect(302, "/app");
+				return redirect(302, "/" + user.id);
 			}
 		}
 

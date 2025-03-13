@@ -10,29 +10,33 @@
 		syncCloudinaryURLToDatabase,
 		uploadImageToCloudinary,
 		deleteImage
-	} from "../(api)/api/v1/image/helpers";
-	import AppShell from "../AppShell.svelte";
+	} from "../../(api)/api/v1/image/helpers";
 	import { enhance } from "$app/forms";
 	import type { PageProps } from "./$types";
 	import { page } from "$app/state";
-	import { isCurrentUser } from "./utils.svelte";
+	import { isCurrentUser } from "../utils.svelte";
+	import { syncCurrentUser } from "../../(api)/api/v1/refresh/helpers";
+	import AppShell from "./AppShell.svelte";
 
 	const message = page.url.searchParams.get("message");
 	let { data }: PageProps = $props();
 	let picture = $state(data.pageuser?.picture ?? null);
-
+	$effect(() => {
+		picture = data.pageuser?.picture ?? null;
+	});
 	const {
 		form,
 		enhance: formEnhance,
 		tainted,
 		isTainted,
-		delayed
+		delayed,
+		reset
 	} = superForm(data.form, {
 		resetForm: false
 	});
 </script>
 
-<AppShell class="flex flex-col items-center gap-y-8">
+<AppShell userId={data.user.id} role={data.user.role ?? "user"}>
 	{#snippet header()}
 		&nbsp;
 	{/snippet}
@@ -52,10 +56,12 @@
 					if (!res) return;
 					picture = res.url;
 					await syncCloudinaryURLToDatabase(data.pageuser.id, res.url);
+					await syncCurrentUser();
 				}}
 				handleDeleteImage={async () => {
 					if (!data.pageuser || !data.pageuser.picture) return;
 					await deleteImage(data.pageuser.id, data.pageuser?.picture);
+					await syncCurrentUser();
 					picture = null;
 				}}
 			/>
@@ -86,17 +92,26 @@
 			/>
 		</div>
 		{#if isCurrentUser()}
-			<Button
-				type="submit"
-				disabled={!isTainted($tainted) || $delayed}
-				class="w-max {!$delayed && 'disabled:hidden'}"
-			>
-				{#if $delayed}
-					Updating
-				{:else}
-					Update
-				{/if}
-			</Button>
+			<div class="flex gap-x-2">
+				<Button
+					type="submit"
+					disabled={!isTainted($tainted) || $delayed}
+					class="w-max {!$delayed && 'disabled:hidden'}"
+				>
+					{#if $delayed}
+						Updating
+					{:else}
+						Update
+					{/if}
+				</Button>
+				<Button
+					disabled={!isTainted($tainted) || $delayed}
+					class="w-max {!$delayed && 'disabled:hidden'}"
+					type="button"
+					variant="secondary"
+					onclick={() => reset()}>Reset</Button
+				>
+			</div>
 		{/if}
 	</form>
 	<div class="flex w-full flex-col gap-y-6 px-4 sm:px-12">

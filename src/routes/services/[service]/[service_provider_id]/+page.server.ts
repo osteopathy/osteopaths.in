@@ -1,5 +1,5 @@
 import { db } from "$lib/database";
-import { and, asc, eq, gte, inArray, not } from "drizzle-orm";
+import { and, asc, eq, gte, not } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
 import {
 	serviceProviderAppointmentRequestTable,
@@ -15,6 +15,7 @@ import { superValidate } from "sveltekit-superforms";
 
 export const load: PageServerLoad = async (event) => {
 	if (!event.locals.user) redirect(302, "/");
+
 	// fetching appointment request of the current logged in user from database
 	// exclusing appointment request with withdrawn status
 	// fetching only upcoming appointment request
@@ -74,6 +75,7 @@ export const load: PageServerLoad = async (event) => {
 	const update = await superValidate(zod(updateRequestSchema));
 	const withdraw = await superValidate(zod(withdrawRequestSchema));
 	const unbookappointment = await superValidate(zod(unbookAppointmentSchema));
+
 	return {
 		serviceProvider,
 		isSubscribed: (serviceProvider?.subscriptions ?? []).length > 0,

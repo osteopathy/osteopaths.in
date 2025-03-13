@@ -6,6 +6,7 @@ import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
+import { syncCurrentUser } from "../../(api)/api/v1/refresh/helpers";
 
 const schema = z.object({
 	name: z.string().nullable(),
@@ -27,7 +28,7 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals, cookies }) => {
+	default: async ({ request, locals }) => {
 		if (!locals.user) return fail(401, { message: "Unauthorized" });
 
 		const form = await superValidate(request, zod(schema));
@@ -36,22 +37,14 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const res = await db
+		await db
 			.update(userTable)
 			.set({
 				name: form.data.name,
 				phone: form.data.phone
 			})
 			.where(eq(userTable.id, locals.user?.id));
-
-		cookies.set("hard-refresh", "TRUE", {
-			httpOnly: true,
-			path: "/",
-			secure: import.meta.env.PROD,
-			sameSite: "lax",
-			expires: new Date(Date.now() + 3600)
-		});
-
+		await syncCurrentUser();
 		return message(form, "Form posted successfully!");
 	}
 };

@@ -20,6 +20,9 @@ const PAGES = {
   "/[user_id]": (params: { user_id: (string | number) }) => {
     return `/${params['user_id']}`
   },
+  "/[user_id]/dashboard": (params: { user_id: (string | number) }) => {
+    return `/${params['user_id']}/dashboard`
+  },
   "/[user_id]/service": (params: { user_id: (string | number) }) => {
     return `/${params['user_id']}/service`
   },
@@ -43,6 +46,7 @@ const SERVERS = {
   "POST /api/v1/push/send": `/api/v1/push/send`,
   "POST /api/v1/push/subscribe": `/api/v1/push/subscribe`,
   "POST /api/v1/push/unsubsribe": `/api/v1/push/unsubsribe`,
+  "POST /api/v1/refresh": `/api/v1/refresh`,
   "GET /login/google": `/login/google`,
   "GET /login/google/callback": `/login/google/callback`
 }
@@ -56,6 +60,10 @@ const ACTIONS = {
   "default /[user_id]": (params: { user_id: (string | number) }) => {
     return `/${params['user_id']}`
   },
+  "accept /service_provider/request": `/service_provider/request?/accept`,
+  "create /service_provider/schedule": `/service_provider/schedule?/create`,
+  "update /service_provider/schedule": `/service_provider/schedule?/update`,
+  "delete /service_provider/schedule": `/service_provider/schedule?/delete`,
   "newschedule /services/[service]/[service_provider_id]/requests": (params: { service: (string | number), service_provider_id: (string | number) }) => {
     return `/services/${params['service']}/${params['service_provider_id']}/requests?/newschedule`
   },
@@ -194,9 +202,9 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = {
-  PAGES: { '/': never, '/admin': never, '/login': never, '/basecolors': never, '/design-system/buttons': never, '/contact-us': never, '/privacy-policy': never, '/term-of-service': never, '/[user_id]': 'user_id', '/[user_id]/service': 'user_id', '/services/[service]': 'service', '/services/[service]/[service_provider_id]': 'service' | 'service_provider_id', '/services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id' }
-  SERVERS: { 'POST /api/v1/image': never, 'DELETE /api/v1/image': never, 'POST /api/v1/push/send': never, 'POST /api/v1/push/subscribe': never, 'POST /api/v1/push/unsubsribe': never, 'GET /login/google': never, 'GET /login/google/callback': never }
-  ACTIONS: { 'logout /': never, 'default /admin': never, 'default /[user_id]': 'user_id', 'newschedule /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'unbookappointment /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'bookappointment /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'create /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'update /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'withdraw /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'subscribe /services/[service]/[service_provider_id]/subscription': 'service' | 'service_provider_id', 'unsubscribe /services/[service]/[service_provider_id]/subscription': 'service' | 'service_provider_id' }
+  PAGES: { '/': never, '/admin': never, '/login': never, '/basecolors': never, '/design-system/buttons': never, '/contact-us': never, '/privacy-policy': never, '/term-of-service': never, '/[user_id]': 'user_id', '/[user_id]/dashboard': 'user_id', '/[user_id]/service': 'user_id', '/services/[service]': 'service', '/services/[service]/[service_provider_id]': 'service' | 'service_provider_id', '/services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id' }
+  SERVERS: { 'POST /api/v1/image': never, 'DELETE /api/v1/image': never, 'POST /api/v1/push/send': never, 'POST /api/v1/push/subscribe': never, 'POST /api/v1/push/unsubsribe': never, 'POST /api/v1/refresh': never, 'GET /login/google': never, 'GET /login/google/callback': never }
+  ACTIONS: { 'logout /': never, 'default /admin': never, 'default /[user_id]': 'user_id', 'accept /service_provider/request': never, 'create /service_provider/schedule': never, 'update /service_provider/schedule': never, 'delete /service_provider/schedule': never, 'newschedule /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'unbookappointment /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'bookappointment /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'create /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'update /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'withdraw /services/[service]/[service_provider_id]/requests': 'service' | 'service_provider_id', 'subscribe /services/[service]/[service_provider_id]/subscription': 'service' | 'service_provider_id', 'unsubscribe /services/[service]/[service_provider_id]/subscription': 'service' | 'service_provider_id' }
   LINKS: Record<string, never>
   Params: { 'user_id': never, 'service': never, 'service_provider_id': never }
 }

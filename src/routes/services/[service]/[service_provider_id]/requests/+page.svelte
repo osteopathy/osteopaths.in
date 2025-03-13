@@ -60,7 +60,7 @@
 {#snippet accordionheader(name: string, { startAt, endAt }: { startAt: string; endAt: string })}
 	<Accordion.Header>
 		<Accordion.Trigger
-			class="flex w-full flex-1 items-center justify-between px-2.5 py-3 transition-all select-none sm:py-5 [&[data-state=open]>span>svg]:rotate-180"
+			class="flex w-full flex-1 items-center justify-between px-2.5 py-3 transition-all select-none sm:py-5 [&[data-state=open]>span>span>svg]:rotate-180"
 		>
 			<h2 class="text-left text-xl sm:text-2xl">{name}</h2>
 			<div class="flex items-center gap-x-2">

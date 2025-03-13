@@ -20,7 +20,9 @@
 		<span class="text-xs font-medium sm:text-sm">Appointments</span>
 	</a>
 	<a
-		aria-current={page.url.pathname === `/${data?.user?.id}` && "page"}
+		aria-current={(page.url.pathname === `/${data?.user?.id}` ||
+			page.url.pathname === `/${data?.user?.id}/dashboard`) &&
+			"page"}
 		href="/{data?.user?.id}"
 		class="group aria-[current='page']:bg-muted aria-[current='page']:text-foreground relative flex w-full flex-col items-center justify-center p-2"
 	>

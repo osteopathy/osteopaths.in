@@ -10,11 +10,11 @@ export default defineConfig({
 		allowedHosts: ["thankful-normally-rattler.ngrok-free.app"]
 	},
 	plugins: [
+		tailwindcss(),
 		sveltekit(),
 		kitRoutes({
 			generated_file_path: 'src/lib/routes_helper.ts'
 		}),
-		tailwindcss(),
 		icon({
 			autoInstall: true,
 			compiler: "svelte"

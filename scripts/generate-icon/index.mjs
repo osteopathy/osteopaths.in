@@ -98,6 +98,16 @@ const RequiredIcons = [
 		solid: "fluent:add-24-filled",
 		name: "Plus"
 	},
+	{
+		outline: 'fluent:lock-closed-24-regular',
+		solid: 'fluent:lock-closed-24-filled',
+		name: "LockClosed"
+	},
+	{
+		outline: 'fluent:lock-open-24-regular',
+		solid: 'fluent:lock-open-24-filled',
+		name: 'LockOpened'
+	}
 ];
 
 const getName = (name) => "../../src/lib/icons/" + name + "Icon" + ".svelte";

@@ -35,7 +35,8 @@ export const actions: Actions = {
 			.set({
 				date: form.data.date,
 				startAt: form.data.start_at,
-				endAt: form.data.end_at
+				endAt: form.data.end_at,
+				disabled: form.data.disabled
 			})
 			.where(eq(serviceProviderDateWiseScheduleTable.id, form.data.id))
 		return message(form, 'updated schedule')

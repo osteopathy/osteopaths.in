@@ -1,5 +1,4 @@
 import {
-	deleteJWTTokenCookie,
 	generateSessionToken,
 	setJWTTokenCookie,
 	setSessionTokenCookie,
@@ -23,7 +22,6 @@ import {
 } from "$lib/server/auth/utils";
 import { base64url, EncryptJWT } from "jose";
 import { JWT_SECRET } from "$env/static/private";
-import { syncCurrentUser } from "../../../../(api)/api/v1/refresh/helpers";
 
 // {
 //   iss: 'https://accounts.google.com',
@@ -149,6 +147,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				}
 			}
 			await updateUniversityMail(event.locals.user.id, userDetails.email);
+			event.locals.user.universityMail = userDetails.email;
 		}
 		if (state.endsWith("personal-mail")) {
 			const existingUser = await getUserFromGoogleId(userDetails.googleId);
@@ -161,13 +160,10 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				);
 			}
 			await updateGoogleAccount(event.locals.user.id, userDetails.googleId, userDetails.email);
+			event.locals.user.email = userDetails.email;
+			event.locals.user.googleId = userDetails.googleId;
 		}
-		return new Response(null, {
-			status: 302,
-			headers: {
-				Location: "/" + event.locals.user.id
-			}
-		});
+		return resolveSession(event, event.locals.user.id, { user: event.locals.user });
 	}
 
 	const existingUser = await (async () => {

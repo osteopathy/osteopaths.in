@@ -136,15 +136,21 @@ export async function GET(event: RequestEvent): Promise<Response> {
 						batch,
 						course
 					);
-					return resolveSession(event, event.locals.user.id, { user: event.locals.user });
+					return resolveSession(event, event.locals.user.id, {
+						user: {
+							...event.locals.user,
+							universityMail: userDetails.email,
+							role: 'student',
+							status: 'verified'
+						}
+					});
 				}
 			}
-
 			await updateUniversityMail(event.locals.user.id, userDetails.email);
+			event.locals.user.universityMail = userDetails.email;
 		}
 		if (state.endsWith("personal-mail")) {
 			const existingUser = await getUserFromGoogleId(userDetails.googleId);
-
 			if (existingUser) {
 				return resolveSession(
 					event,
@@ -153,15 +159,11 @@ export async function GET(event: RequestEvent): Promise<Response> {
 					`already another account is linked to this mail ${userDetails.email}`
 				);
 			}
-
 			await updateGoogleAccount(event.locals.user.id, userDetails.googleId, userDetails.email);
+			event.locals.user.email = userDetails.email;
+			event.locals.user.googleId = userDetails.googleId;
 		}
-		return new Response(null, {
-			status: 302,
-			headers: {
-				Location: "/app"
-			}
-		});
+		return resolveSession(event, event.locals.user.id, { user: event.locals.user });
 	}
 
 	const existingUser = await (async () => {

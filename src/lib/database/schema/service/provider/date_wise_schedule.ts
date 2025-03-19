@@ -1,7 +1,7 @@
-import { text } from "drizzle-orm/sqlite-core";
-import { createTable, date, id, timestamps } from "../../../utils";
-import { serviceProviderTable } from ".";
 import { relations, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
+import { integer, text } from "drizzle-orm/sqlite-core";
+import { serviceProviderTable } from ".";
+import { createTable, date, id, timestamps } from "../../../utils";
 import { serviceProviderAppointmentRequestTable } from "./appointment/request";
 
 export const serviceProviderDateWiseScheduleTable = createTable(
@@ -12,6 +12,7 @@ export const serviceProviderDateWiseScheduleTable = createTable(
 		date: date("date"), // %dd/%mm/%yyyy
 		startAt: text("start_at"),
 		endAt: text("end_at"),
+		disabled: integer("disabled", { mode: 'boolean' }),
 		...timestamps
 	}
 );

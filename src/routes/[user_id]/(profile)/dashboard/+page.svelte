@@ -48,6 +48,8 @@
 	import FormActionButton from "$lib/snippets/form-action-button.svelte";
 	import DeleteIcon from "$lib/icons/DeleteIcon.svelte";
 	import { acceptRequestSchema } from "../../../service_provider/request/schema";
+	import LockOpenedIcon from "$lib/icons/LockOpenedIcon.svelte";
+	import LockClosedIcon from "$lib/icons/LockClosedIcon.svelte";
 	let { data }: PageProps = $props();
 	let dateScheduleGroup = $derived(
 		Object.groupBy(data.serviceProvider?.dateWiseScheduleList ?? [], (item) =>
@@ -68,8 +70,8 @@
 			Subscribed
 		</div>
 	{/snippet}
-	<Accordion.Root value={["requests", "appointments"]} class="w-full" type="multiple">
-		<Accordion.Item value="appointments" class="border-border border-b">
+	<Accordion.Root value={["requests"]} class="w-full" type="multiple">
+		<!-- <Accordion.Item value="appointments" class="border-border border-b">
 			<Accordion.Header>
 				<div
 					class="flex w-full flex-1 items-center justify-between px-2.5 py-3 transition-all select-none sm:py-5"
@@ -119,21 +121,19 @@
 					{/each}
 				</div>
 			</Accordion.Content>
-		</Accordion.Item>
+		</Accordion.Item> -->
 		<Accordion.Item value="requests" class="border-border border-b">
 			<Accordion.Header>
 				<div
 					class="flex w-full flex-1 items-center justify-between px-2.5 py-3 transition-all select-none sm:py-5"
 				>
 					<Accordion.Trigger class="w-full text-left text-2xl sm:text-3xl">
-						Schedule & Requests
+						Your Schedule
 					</Accordion.Trigger>
 					<div class="flex items-center gap-x-4">
 						<Popover.Root>
-							<Popover.Trigger
-								class={buttonVariants({ size: "icon", variant: "secondary", class: "group" })}
-							>
-								<PlusIcon />
+							<Popover.Trigger class={buttonVariants({ variant: "secondary", class: "group" })}>
+								<PlusIcon /> Schedule
 							</Popover.Trigger>
 							<Popover.Content
 								align="end"
@@ -146,9 +146,6 @@
 										service_provider_id: data.serviceProvider?.id
 									}}
 									action={route("create /service_provider/schedule")}
-									onComplete={() => {
-										isSchedulePopoverOpen = false;
-									}}
 									schema={createScheduleSchema}
 									data={data.scheduleForms.create}
 								>
@@ -193,51 +190,26 @@
 							<div class="mt-2 flex w-full items-center justify-between gap-x-2">
 								<h3 class="text-xl">{dateSchedule.startAt} - {dateSchedule.endAt}</h3>
 								<div class="flex gap-x-4">
-									<Popover.Root>
-										<Popover.Trigger
-											class={buttonVariants({
-												size: "icon",
-												variant: "ghost",
-												class: "group -mb-2"
-											})}
-										>
-											<CalendarEditIcon />
-										</Popover.Trigger>
-										<Popover.Content
-											align="center"
-											side="bottom"
-											class="bg-layer-3 z-20 max-w-xs rounded-2xl px-4 pt-4 pb-5"
-										>
-											<Popover.Arrow class="text-layer-10" />
-											<FormAction
-												emebed={{
-													id: dateSchedule.id,
-													date: dateSchedule.date
-												}}
-												action={route("update /service_provider/schedule")}
-												schema={updateScheduleSchema}
-												data={data.scheduleForms.update}
-											>
-												{#snippet form({ loading })}
-													<SelectTimeRange onwards from="08:00" to="20:00" />
-													<Button class="mt-2" disabled={loading} type="submit" size="sm">
-														Update
-													</Button>
-												{/snippet}
-											</FormAction>
-										</Popover.Content>
-									</Popover.Root>
 									<FormActionButton
-										emebed={{ id: dateSchedule.id }}
-										action={route("delete /service_provider/schedule")}
-										schema={deleteScheduleSchema}
-										data={data.scheduleForms.delete}
-										variant="destructive"
+										emebed={{
+											id: dateSchedule.id,
+											date: dateSchedule.date,
+											start_at: dateSchedule.startAt,
+											end_at: dateSchedule.endAt,
+											disabled: !dateSchedule.disabled
+										}}
+										action={route("update /service_provider/schedule")}
+										schema={updateScheduleSchema}
+										data={data.scheduleForms.update}
 										size="icon"
+										variant={dateSchedule.disabled ? "outline" : "ghost"}
 										class="group -mb-2"
-										disabled={dateSchedule.requests.length !== 0}
 									>
-										<DeleteIcon />
+										{#if dateSchedule.disabled}
+											<LockClosedIcon />
+										{:else}
+											<LockOpenedIcon />
+										{/if}
 									</FormActionButton>
 								</div>
 							</div>

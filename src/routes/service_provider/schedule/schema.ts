@@ -14,6 +14,7 @@ export const updateScheduleSchema = z.object({
 	date: z.date(),
 	start_at: z.string(),
 	end_at: z.string(),
+	disabled: z.boolean()
 })
 
 export type UpdateScheduleSchema = z.infer<typeof updateScheduleSchema>

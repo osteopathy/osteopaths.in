@@ -4,7 +4,6 @@ import { userTable } from "../../../user";
 import { serviceProviderTable } from "../index";
 import { relations, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
 import { serviceProviderDateWiseScheduleTable } from "../date_wise_schedule";
-import { serviceProviderAppointmentTable } from ".";
 
 // Pending: The initial state, awaiting processing.
 // Accepted: The request has been approved.
@@ -12,6 +11,16 @@ import { serviceProviderAppointmentTable } from ".";
 // Cancelled: The request was accepted but subsequently withdrawn by either party.
 // Completed: The appointment has taken place.
 // No-Show: The appointment was accepted, but the requesting party did not attend.
+
+// export type WithdrawnReason =
+//   | 'AnotherRequestAccepted'
+//   | 'UserCancelled'
+//   | 'ServiceProviderCancelled'
+//   | 'UserNoLongerNeedsService'
+//   | 'ServiceProviderUnavailable'
+//   | 'Other'
+//   | 'unknown';
+
 
 export const WithDrawReasons = {
 	AnotherRequestAccepted: "Another Request is Accepted by ...",
@@ -58,6 +67,5 @@ export const serviceProviderAppointmentRequestRelation = relations(
 			fields: [serviceProviderAppointmentRequestTable.dateWiseScheduleId],
 			references: [serviceProviderDateWiseScheduleTable.id]
 		}),
-		// appointment: many(serviceProviderAppointmentRequestTable),
 	})
 );

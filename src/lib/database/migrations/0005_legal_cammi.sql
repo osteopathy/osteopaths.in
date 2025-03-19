@@ -1,1 +1,0 @@
-ALTER TABLE `service_provider_appointment_request` ADD `withdrawn_reason` text;

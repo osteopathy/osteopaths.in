@@ -11,11 +11,11 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		error(401, "Unauthorized");
 	}
 
-	const { title, body }: { title: string; body: string } = await request.json();
-	await db.insert(userNotificationTable).values({ title, body, userId: locals.user.id });
+	const { title, body, userId }: { title: string; body: string, userId: string } = await request.json();
+	await db.insert(userNotificationTable).values({ title, body, userId });
 
 	const subscriptions = await db.query.userNotificationSubscriptionTable.findMany({
-		where: eq(userNotificationSubscriptionTable.userId, locals.user.id)
+		where: eq(userNotificationSubscriptionTable.userId, userId)
 	});
 
 	// Send push notification to all user's subscriptions

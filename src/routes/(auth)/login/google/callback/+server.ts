@@ -135,7 +135,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 							{
 								title: "Student " + batch + course + " " + userDetails.name,
 								body: userDetails.email,
-								userId: event.params.userid
+								userId: "JBWHKCYFWM"
 							}
 						),
 					})

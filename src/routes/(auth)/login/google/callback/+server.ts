@@ -129,6 +129,16 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				const course = id.substring(5);
 
 				if (batch && course) {
+					await event.fetch('/api/v1/push/send', {
+						method: 'POST',
+						body: JSON.stringify(
+							{
+								title: "Student " + batch + course + " " + userDetails.name,
+								body: userDetails.email,
+								userId: event.params.userid
+							}
+						),
+					})
 					await connectStudent(
 						event.locals.user.id,
 						userDetails.email,

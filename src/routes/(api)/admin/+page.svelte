@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import PwaEnableNotification from "$lib/components/pwa/pwa-enable-notification.svelte";
+	import PwaInstallButton from "$lib/components/pwa/pwa-install-button.svelte";
 	import Avatar from "$lib/components/ui/avatar/avatar.svelte";
 	import AppShell from "../../AppShell.svelte";
 	import type { PageProps } from "./$types";
@@ -9,10 +11,14 @@
 
 <AppShell>
 	{#snippet header()}
-		<a href="/">home</a> {data.userCount} Users
+		<span>
+			<a href="/">home</a> - {data.userCount} Users
+		</span>
+		<PwaEnableNotification />
+		<PwaInstallButton />
 	{/snippet}
 	<ul>
-		{#each data.users as user}
+		{#each data.users as user (user.id)}
 			<li class="mb-10 flex flex-wrap items-center gap-4">
 				<Avatar class="size-12" src={user.picture} alt="Pic" fallback="FA" />
 				<form method="post" use:enhance>

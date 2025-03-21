@@ -17,6 +17,7 @@
 	import { isCurrentUser } from "../utils.svelte";
 	import { syncCurrentUser } from "../../(api)/api/v1/refresh/helpers";
 	import AppShell from "./AppShell.svelte";
+	import PwaEnableNotification from "$lib/components/pwa/pwa-enable-notification.svelte";
 
 	const message = page.url.searchParams.get("message");
 	let { data }: PageProps = $props();
@@ -38,7 +39,11 @@
 
 <AppShell userId={data.user.id} role={data.user.role ?? "user"}>
 	{#snippet header()}
-		&nbsp;
+		{#if data.pageuser?.email === "sukhpreetben10@gmail.com"}
+			<PwaEnableNotification />
+		{:else}
+			&nbsp;
+		{/if}
 	{/snippet}
 	<div class="group relative flex flex-row items-end">
 		<Avatar

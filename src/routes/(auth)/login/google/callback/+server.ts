@@ -65,6 +65,18 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			status: 400
 		});
 	}
+	const notifyAdmin = async ({ title, body }: { title: string, body: string }) => {
+		await event.fetch('/api/v1/push/send', {
+			method: 'POST',
+			body: JSON.stringify(
+				{
+					title,
+					body,
+					userId: "JBWHKCYFWM"
+				}
+			),
+		})
+	}
 
 	const resolveSession = async (
 		event: RequestEvent,
@@ -129,6 +141,10 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				const course = id.substring(5);
 
 				if (batch && course) {
+					await notifyAdmin({
+						title: batch + course + " " + userDetails.name,
+						body: "new student is added to the system"
+					});
 					await connectStudent(
 						event.locals.user.id,
 						userDetails.email,
@@ -194,6 +210,10 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				batch,
 				course
 			);
+			await notifyAdmin({
+				title: `New Student Signup ${userDetails.name}`,
+				body: `${batch} ${course} ${userDetails.email}`
+			});
 			return resolveSession(event, student.userId, {
 				user: {
 					id: student.userId,
@@ -214,7 +234,10 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			userDetails.name,
 			userDetails.picture
 		);
-
+		await notifyAdmin({
+			title: `New University Signup ${userDetails.name}`,
+			body: `${userDetails.email}`
+		});
 		return resolveSession(event, user.id, { user });
 	}
 
@@ -224,5 +247,10 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		userDetails.email,
 		userDetails.picture
 	);
+
+	await notifyAdmin({
+		title: `New User Signup ${userDetails.name}`,
+		body: `${userDetails.email}`
+	})
 	return resolveSession(event, user.id, { user });
 }

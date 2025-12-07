@@ -117,14 +117,14 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			}
 		});
 	};
-
+	console.log("[OAuth Callback] Decoding ID token", tokens.idToken());
 	const claims = decodeIdToken(tokens.idToken()) as {
 		sub: string;
 		name: string;
 		email: string;
 		picture: string;
 	};
-
+	console.log("[OAuth Callback] Decoded ID token claims:", claims);
 	// Reason to use googleUserId instead of just email
 	// A Google ID token's sub field is unique to each Google Account and is never reused.
 	// A Google Account can have multiple email addresses, but only one ID token.
@@ -264,7 +264,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		userDetails.email,
 		userDetails.picture
 	);
-	
+
 	await notifyAdmin({
 		title: `New User Signup ${userDetails.name}`,
 		body: `${userDetails.email}`

@@ -10,7 +10,7 @@
 </script>
 
 <AppShell back="/{data.user?.id}/service" heading="Osteopaths" class="mt-4">
-	<div class="flex w-full items-start gap-x-3 px-2.5 sm:gap-x-6">
+	<div class="flex flex-col w-full items-start gap-x-3 px-2.5 sm:gap-x-6">
 		{#each data.serviceProviderList as serviceProvider, index (index)}
 			<a
 				href={route("/services/[service]/[service_provider_id]", {

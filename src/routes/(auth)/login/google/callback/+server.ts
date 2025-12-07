@@ -40,17 +40,28 @@ import { JWT_SECRET } from "$env/static/private";
 // }
 
 export async function GET(event: RequestEvent): Promise<Response> {
+	console.log("[OAuth Callback] Starting Google OAuth callback handler");
 	const code = event.url.searchParams.get("code");
 	const state = event.url.searchParams.get("state");
 	const storedState = event.cookies.get("google_oauth_state") ?? null;
 	const codeVerifier = event.cookies.get("google_code_verifier") ?? null;
 
+	console.log("[OAuth Callback] Code present:", !!code, "State present:", !!state);
+	console.log(
+		"[OAuth Callback] Stored state present:",
+		!!storedState,
+		"Code verifier present:",
+		!!codeVerifier
+	);
+
 	if (code === null || state === null || storedState === null || codeVerifier === null) {
+		console.error("[OAuth Callback] Missing required parameters");
 		return new Response(null, {
 			status: 400
 		});
 	}
 	if (state !== storedState) {
+		console.error("[OAuth Callback] State mismatch - potential CSRF attack");
 		return new Response(null, {
 			status: 400
 		});
@@ -59,23 +70,29 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	let tokens: OAuth2Tokens;
 	try {
 		tokens = await google.validateAuthorizationCode(code, codeVerifier);
+		console.log("[OAuth Callback] Successfully validated authorization code");
 	} catch (e) {
 		// Invalid code or client credentials
+		console.error("[OAuth Callback] Failed to validate authorization code:", e);
 		return new Response(null, {
 			status: 400
 		});
 	}
 	const notifyAdmin = async ({ title, body }: { title: string, body: string }) => {
-		await event.fetch('/api/v1/push/send', {
-			method: 'POST',
-			body: JSON.stringify(
-				{
+		try {
+			console.log("[OAuth Callback] Sending admin notification:", { title, body });
+			await event.fetch("/api/v1/push/send", {
+				method: "POST",
+				body: JSON.stringify({
 					title,
 					body,
 					userId: "JBWHKCYFWM"
-				}
-			),
-		})
+				})
+			});
+			console.log("[OAuth Callback] Admin notification sent successfully");
+		} catch (error) {
+			console.error("[OAuth Callback] Failed to send admin notification:", error);
+		}
 	}
 
 	const resolveSession = async (
@@ -247,10 +264,11 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		userDetails.email,
 		userDetails.picture
 	);
-
+	
 	await notifyAdmin({
 		title: `New User Signup ${userDetails.name}`,
 		body: `${userDetails.email}`
 	})
+
 	return resolveSession(event, user.id, { user });
 }

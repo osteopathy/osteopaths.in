@@ -103,13 +103,19 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	) => {
 		const sessionToken = generateSessionToken();
 		const session = await createSession(sessionToken, userId);
+		console.log("[OAuth Callback] Created session with token:", sessionToken);
 		setSessionTokenCookie(event, sessionToken, session.expiresAt);
+		console.log("[OAuth Callback] Session token cookie set");
+
 		const secret = base64url.decode(JWT_SECRET);
+		console.log("[OAuth Callback] Decoded JWT secret");
 		const jwt = await new EncryptJWT(payload)
 			.setProtectedHeader({ alg: "dir", enc: "A128CBC-HS256" })
 			.setExpirationTime(session.expiresAt)
 			.encrypt(secret);
+		console.log("[OAuth Callback] Generated encrypted JWT");
 		setJWTTokenCookie(event, jwt, session.expiresAt);
+
 		return new Response(null, {
 			status: 302,
 			headers: {

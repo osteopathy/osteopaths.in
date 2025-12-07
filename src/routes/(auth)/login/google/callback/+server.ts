@@ -108,6 +108,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		console.log("[OAuth Callback] Session token cookie set", JWT_SECRET);
 
 		const secret = base64url.decode(JWT_SECRET);
+		console.log("SECRET", secret);
 		console.log("[OAuth Callback] Decoded JWT secret");
 		const jwt = await new EncryptJWT(payload)
 			.setProtectedHeader({ alg: "dir", enc: "A128CBC-HS256" })

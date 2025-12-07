@@ -105,7 +105,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		const session = await createSession(sessionToken, userId);
 		console.log("[OAuth Callback] Created session with token:", sessionToken);
 		setSessionTokenCookie(event, sessionToken, session.expiresAt);
-		console.log("[OAuth Callback] Session token cookie set");
+		console.log("[OAuth Callback] Session token cookie set", JWT_SECRET);
 
 		const secret = base64url.decode(JWT_SECRET);
 		console.log("[OAuth Callback] Decoded JWT secret");

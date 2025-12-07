@@ -8,7 +8,7 @@
 	{#snippet header()}
 		&nbsp;
 	{/snippet}
-	<Button href="/login" variant="default" size="lg">
+	<Button href="/login/google" variant="default" size="lg">
 		<GoogleIcon />
 		Continue With Google
 	</Button>

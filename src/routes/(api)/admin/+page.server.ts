@@ -25,8 +25,27 @@ export const actions: Actions = {
 		if (event.locals.user?.email !== "sukhpreetben10@gmail.com") redirect(302, "/");
 		const formData = await event.request.formData();
 		const user_id = formData.get("user_id")?.toString();
+		const action = formData.get("action")?.toString();
+
+		if (action === "edit" && user_id) {
+			const name = formData.get("name")?.toString();
+			const role = formData.get("role")?.toString() as
+				| "user"
+				| "student"
+				| "service_provider"
+				| "guest";
+			const status = formData.get("status")?.toString() as "idle" | "verified";
+			await db.update(userTable).set({ name, role, status }).where(eq(userTable.id, user_id));
+			return { success: true, message: "User updated" };
+		}
+
+		if (action === "delete" && user_id) {
+			await db.delete(userTable).where(eq(userTable.id, user_id));
+			return { success: true, message: "User deleted" };
+		}
+
 		// Impersonation
-		if (user_id) {
+		if (user_id && !action) {
 			const user = await db.query.userTable.findFirst({ where: eq(userTable.id, user_id) });
 			if (user) {
 				const sessionToken = generateSessionToken();

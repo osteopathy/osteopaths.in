@@ -1,7 +1,7 @@
 import { db } from "$lib/database";
 import { count, eq } from "drizzle-orm";
 import type { Actions, PageServerLoad } from "./$types";
-import { userTable } from "$lib/database/schema";
+import { serviceProviderTable, userTable } from "$lib/database/schema";
 import {
 	generateSessionToken,
 	setJWTTokenCookie,
@@ -36,6 +36,16 @@ export const actions: Actions = {
 				| "guest";
 			const status = formData.get("status")?.toString() as "idle" | "verified";
 			await db.update(userTable).set({ name, role, status }).where(eq(userTable.id, user_id));
+			if (role === "service_provider") {
+				const serviceProvider = await db.query.serviceProviderTable.findFirst({
+					where: eq(userTable.id, user_id)
+				});
+				if (!serviceProvider) {
+					await db
+						.insert(serviceProviderTable)
+						.values({ userId: user_id, serviceId: "osteopathy" });
+				}
+			}
 			return { success: true, message: "User updated" };
 		}
 

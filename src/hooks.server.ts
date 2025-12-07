@@ -18,6 +18,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	}
 
 	const secret = base64url.decode(JWT_SECRET);
+
 	try {
 		const value = await jwtDecrypt<{ user: NonNullable<auth.SessionValidationResult["user"]> }>(
 			jwtToken,

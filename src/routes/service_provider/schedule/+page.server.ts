@@ -10,18 +10,24 @@ import { createScheduleSchema, deleteScheduleSchema, updateScheduleSchema } from
 export const actions: Actions = {
 	create: async (event) => {
 		if (!event.locals.user) redirect(302, "/");
+
 		const form = await superValidate(event.request, zod(createScheduleSchema));
+
 		if (!form.valid) {
 			return fail(400, { form });
 		}
-		await db
-			.insert(serviceProviderDateWiseScheduleTable)
-			.values({
+		try {
+			console.log("[Schedule] Creating new schedule:", form.data);
+			await db.insert(serviceProviderDateWiseScheduleTable).values({
 				serviceProviderId: form.data.service_provider_id,
 				date: form.data.date,
 				startAt: form.data.start_at,
 				endAt: form.data.end_at
-			})
+			});
+		} catch (error) {
+			console.error("[Schedule] Failed to create schedule:", error);
+			return fail(400, { form, error: "A schedule for this date already exists." });
+		}
 		return message(form, 'new schedule')
 	},
 	update: async (event) => {

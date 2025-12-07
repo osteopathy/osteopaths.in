@@ -12,7 +12,7 @@ import { acceptRequestSchema } from "../../../service_provider/request/schema";
 export const load: PageServerLoad = async (event) => {
 	if (!event.locals.user) redirect(302, "/");
 	if (event.locals?.user?.role !== 'service_provider') redirect(302, `/${event.locals.user.id}`)
-
+	console.log(event.locals.user);
 	const serviceProvider = await db.query.serviceProviderTable.findFirst({
 		where: eq(serviceProviderTable.userId, event.locals.user.id),
 		with: {
@@ -52,7 +52,7 @@ export const load: PageServerLoad = async (event) => {
 			}
 		}
 	})
-
+	console.log(serviceProvider);
 	return {
 		subscriptionCount: db.select({ count: count() }).from(serviceSubscriptionTable).where(eq(serviceSubscriptionTable.userId, event.locals.user.id)).then((data) => data[0].count),
 		serviceProvider,

@@ -95,27 +95,32 @@
 	<!-- Notification Bell Button -->
 	<button
 		onclick={toggleNotificationCenter}
-		class="relative rounded-full p-2 hover:bg-muted transition-colors"
+		class="hover:bg-muted relative rounded-full p-2 transition-colors"
 		aria-label="Notifications"
 	>
 		{#if unreadCount > 0}
-			<BellRingIcon class="size-6 text-foreground" />
+			<BellRingIcon class="text-foreground size-6" />
 			<span
 				class="absolute top-1 right-1 flex size-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white"
 			>
 				{unreadCount > 9 ? "9+" : unreadCount}
 			</span>
 		{:else}
-			<BellIcon class="size-6 text-foreground" />
+			<BellIcon class="text-foreground size-6" />
 		{/if}
 	</button>
 
 	<!-- Notification Panel -->
 	{#if isOpen}
 		<div
-			class="fixed inset-0 z-50 md:absolute md:inset-auto md:right-0 md:top-12 md:w-96"
+			class="fixed inset-0 z-50 md:absolute md:inset-auto md:top-12 md:right-0 md:w-96"
+			role="dialog"
+			aria-label="Notification panel"
 			onclick={(e) => {
 				if (e.target === e.currentTarget) isOpen = false;
+			}}
+			onkeydown={(e) => {
+				if (e.key === 'Escape') isOpen = false;
 			}}
 		>
 			<div
@@ -164,7 +169,7 @@
 							>
 								<div class="flex-1">
 									<div class="flex items-start justify-between gap-2">
-										<h3 class="font-medium text-sm leading-tight">
+										<h3 class="text-sm leading-tight font-medium">
 											{notification.title}
 										</h3>
 										{#if !notification.readAt}

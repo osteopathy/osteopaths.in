@@ -24,9 +24,7 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 	const notifications = await query;
 
 	// Filter for unread if requested
-	const filteredNotifications = unreadOnly
-		? notifications.filter((n) => !n.readAt)
-		: notifications;
+	const filteredNotifications = unreadOnly ? notifications.filter((n) => !n.readAt) : notifications;
 
 	return json({
 		notifications: filteredNotifications,
